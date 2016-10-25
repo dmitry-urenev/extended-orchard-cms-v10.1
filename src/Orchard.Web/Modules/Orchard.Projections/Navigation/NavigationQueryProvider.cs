@@ -44,6 +44,7 @@ namespace Orchard.Projections.Navigation {
                                 Classes = item.Classes,
                                 Url = item.Url,
                                 Href = item.Href,
+                                TargetBlank = item.TargetBlank,
                                 LinkToFirstChild = false,
                                 RouteValues = routes,
                                 LocalNav = item.LocalNav,

@@ -28,6 +28,12 @@ namespace Orchard.UI.Navigation {
             return this;
         }
 
+        public NavigationItemBuilder TargetBlank(bool targetBlank)
+        {
+            _item.TargetBlank = targetBlank;
+            return this;
+        }
+
         public NavigationItemBuilder Content(IContent content) {
             _item.Content = content;
             return this;

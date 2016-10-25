@@ -20,6 +20,7 @@ namespace Orchard.UI.Navigation {
         public string IdHint { get; set; }
         public string Url { get; set; }
         public string Href { get; set; }
+        public bool TargetBlank { get; set; }
         public string Position { get; set; }
         public bool LinkToFirstChild { get; set; }
         public bool LocalNav { get; set; }

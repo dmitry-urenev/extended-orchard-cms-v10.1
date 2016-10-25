@@ -105,6 +105,7 @@ namespace Orchard.Alias.Navigation {
                                 Classes = item.Classes,
                                 Url = path,
                                 Href = item.Href,
+                                TargetBlank = item.TargetBlank,
                                 LinkToFirstChild = false,
                                 RouteValues = routes,
                                 LocalNav = item.LocalNav,

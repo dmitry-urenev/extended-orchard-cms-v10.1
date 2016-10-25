@@ -268,6 +268,7 @@ namespace Orchard.Core.Navigation.Services {
                 Classes = list.Select(x => x.Classes).FirstOrDefault(x => x != null && x.Count > 0),
                 Url = list.Select(x => x.Url).FirstOrDefault(x => !string.IsNullOrWhiteSpace(x)),
                 Href = list.Select(x => x.Href).FirstOrDefault(x => !string.IsNullOrWhiteSpace(x)),
+                TargetBlank = list.First().TargetBlank,
                 LinkToFirstChild = list.First().LinkToFirstChild,
                 RouteValues = list.Select(x => x.RouteValues).FirstOrDefault(x => x != null),
                 LocalNav = list.Any(x => x.LocalNav),
