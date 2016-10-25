@@ -17,5 +17,8 @@ namespace Orchard.Autoroute.Services {
         IEnumerable<RoutePattern> GetPatterns(string contentType);
         bool ProcessPath(AutoroutePart part);
         bool IsPathValid(string slug);
+
+
+        string GenerateLocalAlias(AutoroutePart current);
     }
 }

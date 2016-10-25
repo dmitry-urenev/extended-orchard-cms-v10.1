@@ -136,7 +136,9 @@
     <Compile Include="Recipes\Executors\HomeAliasStep.cs" />
     <Compile Include="ResourceManifest.cs" />
     <Compile Include="Services\AliasResolverSelector.cs" />
+    <Compile Include="Services\DefaultAliasPatternProvider.cs" />
     <Compile Include="Services\HomeAliasService.cs" />
+    <Compile Include="Services\IAliasPatternProvider.cs" />
     <Compile Include="Services\IHomeAliasService.cs" />
     <Compile Include="Services\PathResolutionService.cs" />
     <Compile Include="Services\IPathResolutionService.cs" />

@@ -49,5 +49,16 @@ namespace Orchard.Autoroute
 
             return 4;
         }
+
+        public int UpdateFrom4()
+        {
+            SchemaBuilder.AlterTable("AutoroutePartRecord", table =>
+            {
+                table.AddColumn<string>("LocalAlias", c => c.WithLength(2048));
+                table.AddColumn<bool>("IsHomePage", c => c.WithDefault(false));
+            });
+
+            return 5;
+        }
     }
 }

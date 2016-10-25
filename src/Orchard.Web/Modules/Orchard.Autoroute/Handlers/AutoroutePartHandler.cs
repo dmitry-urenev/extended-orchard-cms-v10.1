@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Orchard.Autoroute.Models;
 using Orchard.Autoroute.Services;
 using Orchard.ContentManagement;
@@ -58,21 +59,35 @@ namespace Orchard.Autoroute.Handlers {
             ProcessAlias(part);
 
             // Should it become the home page?
-            if (part.PromoteToHomePage) {
-                // Get the current homepage an unmark it as the homepage.
-                var currentHomePage = _homeAliasService.GetHomePage(VersionOptions.Latest);
-                if(currentHomePage != null && currentHomePage.Id != part.Id) {
-                    var autoroutePart = currentHomePage.As<AutoroutePart>();
-
-                    if (autoroutePart != null) {
-                        autoroutePart.PromoteToHomePage = false;
-                        if(autoroutePart.IsPublished())
-                            _orchardServices.ContentManager.Publish(autoroutePart.ContentItem);
+            if (part.IsHomePage)
+            {
+                var currentHomePages = _orchardServices.ContentManager.Query<AutoroutePart, AutoroutePartRecord>().Where(x => x.IsHomePage).List();
+                foreach (var current in currentHomePages.Where(x => x.Id != part.Id))
+                {
+                    if (current != null && string.IsNullOrEmpty(current.DisplayAlias))
+                    {
+                        current.CustomPattern = String.Empty; // force the regeneration
+                        current.LocalAlias = _autorouteService.Value.GenerateLocalAlias(current);
+                        current.DisplayAlias = _autorouteService.Value.GenerateAlias(current);
                     }
+                    current.IsHomePage = false;
+                    _autorouteService.Value.PublishAlias(current);
                 }
 
+                // Get the current homepage an unmark it as the homepage.
+                //var currentHomePage = _homeAliasService.GetHomePage(VersionOptions.Latest);
+                //if(currentHomePage != null && currentHomePage.Id != part.Id) {
+                //    var autoroutePart = currentHomePage.As<AutoroutePart>();
+
+                //    if (autoroutePart != null) {
+                //        autoroutePart.PromoteToHomePage = false;
+                //        if(autoroutePart.IsPublished())
+                //            _orchardServices.ContentManager.Publish(autoroutePart.ContentItem);
+                //    }
+                //}
+
                 // Update the home alias to point to this item being published.
-                _homeAliasService.PublishHomeAlias(part);
+                // _homeAliasService.PublishHomeAlias(part);
             }
             
             _autorouteService.Value.PublishAlias(part);
@@ -80,7 +95,9 @@ namespace Orchard.Autoroute.Handlers {
 
         private void ProcessAlias(AutoroutePart part) {
             // Generate an alias if one as not already been entered.
-            if (String.IsNullOrWhiteSpace(part.DisplayAlias)) {
+            if (String.IsNullOrWhiteSpace(part.LocalAlias))
+            {
+                part.LocalAlias = _autorouteService.Value.GenerateLocalAlias(part);
                 part.DisplayAlias = _autorouteService.Value.GenerateAlias(part);
             }
 

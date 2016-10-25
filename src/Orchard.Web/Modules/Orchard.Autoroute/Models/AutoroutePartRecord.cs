@@ -13,5 +13,10 @@ namespace Orchard.Autoroute.Models {
         
         [StringLength(2048)]
         public virtual string DisplayAlias { get; set; }
+
+        [StringLength(2048)]
+        public virtual string LocalAlias { get; set; }
+
+        public virtual bool IsHomePage { get; set; }
     }
 }

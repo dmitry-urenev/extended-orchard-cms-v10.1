@@ -108,18 +108,27 @@ namespace Orchard.Autoroute.Drivers {
                 }
             }
 
+            string alias = part.DisplayAlias;
             var viewModel = new AutoroutePartEditViewModel {
-                CurrentUrl = part.DisplayAlias,
+                Alias = alias,
+                ParentPath = alias,
+                IsHomePage = part.IsHomePage,
+                LocalAlias = part.LocalAlias,
                 Settings = settings,
                 CurrentCulture = itemCulture
             };
+            if (!string.IsNullOrEmpty(alias) && !string.IsNullOrEmpty(part.LocalAlias)
+               && alias.EndsWith(part.LocalAlias))
+            {
+                viewModel.ParentPath = alias.Substring(0, alias.Length - part.LocalAlias.Length);
+            }
 
             // Retrieve home page.
-            var homePageId = _homeAliasService.GetHomePageId(VersionOptions.Latest);
-            var isHomePage = part.Id == homePageId;
+            //var homePageId = _homeAliasService.GetHomePageId(VersionOptions.Latest);
+            //var isHomePage = part.Id == homePageId;
 
-            viewModel.IsHomePage = isHomePage;
-            viewModel.PromoteToHomePage = part.PromoteToHomePage;
+            //viewModel.IsHomePage = isHomePage;
+            //viewModel.PromoteToHomePage = part.PromoteToHomePage;
 
             if (settings.PerItemConfiguration) {
                 // If enabled, the list of all available patterns is displayed, and the user can select which one to use.
@@ -128,16 +137,18 @@ namespace Orchard.Autoroute.Drivers {
 
             var previous = part.DisplayAlias;
             if (updater != null && updater.TryUpdateModel(viewModel, Prefix, null, null)) {
-                
+
                 // Remove any leading slash in the permalink.
-                if (viewModel.CurrentUrl != null) {
-                    viewModel.CurrentUrl = viewModel.CurrentUrl.TrimStart('/');
+                if (viewModel.Alias != null)
+                {
+                    viewModel.Alias = viewModel.Alias.TrimStart('/');
                 }
 
-                part.DisplayAlias = viewModel.CurrentUrl;
+                part.LocalAlias = GetLastSegment(viewModel.Alias);  
+                part.DisplayAlias = viewModel.Alias;
 
                 // Reset the alias if we need to force regeneration, and the user didn't provide a custom one.
-                if(settings.AutomaticAdjustmentOnEdit && previous == part.DisplayAlias) {
+                if (settings.AutomaticAdjustmentOnEdit && previous == part.DisplayAlias) {
                     part.DisplayAlias = String.Empty;
                 }
 
@@ -150,11 +161,23 @@ namespace Orchard.Autoroute.Drivers {
                 }
 
                 // Mark the content item to be the homepage. Once this content isp ublished, the home alias will be updated to point to this content item.
-                part.PromoteToHomePage = viewModel.PromoteToHomePage;
+                if (viewModel.PromoteToHomePage)
+                {
+                    part.IsHomePage = true;
+                }
             }
 
             return ContentShape("Parts_Autoroute_Edit", 
                 () => shapeHelper.EditorTemplate(TemplateName: "Parts.Autoroute.Edit", Model: viewModel, Prefix: Prefix));
+        }
+
+        private string GetLastSegment(string alias)
+        {
+            if (!string.IsNullOrEmpty(alias) && alias.LastIndexOf("/") != -1)
+            {
+                return alias.Substring(alias.LastIndexOf("/"));
+            }
+            return alias;
         }
 
         protected override void Importing(AutoroutePart part, ImportContentContext context) {
@@ -164,18 +187,18 @@ namespace Orchard.Autoroute.Drivers {
             }
 
             context.ImportAttribute(part.PartDefinition.Name, "Alias", s => part.DisplayAlias = s);
+            context.ImportAttribute(part.PartDefinition.Name, "LocalAlias", s => part.LocalAlias = s);
             context.ImportAttribute(part.PartDefinition.Name, "CustomPattern", s => part.CustomPattern = s);
             context.ImportAttribute(part.PartDefinition.Name, "UseCustomPattern", s => part.UseCustomPattern = XmlHelper.Parse<bool>(s));
             context.ImportAttribute(part.PartDefinition.Name, "UseCulturePattern", s => part.UseCulturePattern = XmlHelper.Parse<bool>(s));
-            context.ImportAttribute(part.PartDefinition.Name, "PromoteToHomePage", s => part.PromoteToHomePage = XmlHelper.Parse<bool>(s));
         }
 
         protected override void Exporting(AutoroutePart part, ExportContentContext context) {
             context.Element(part.PartDefinition.Name).SetAttributeValue("Alias", part.Record.DisplayAlias);
+            context.Element(part.PartDefinition.Name).SetAttributeValue("LocalAlias", part.Record.LocalAlias ?? "");
             context.Element(part.PartDefinition.Name).SetAttributeValue("CustomPattern", part.Record.CustomPattern);
             context.Element(part.PartDefinition.Name).SetAttributeValue("UseCustomPattern", part.Record.UseCustomPattern);
             context.Element(part.PartDefinition.Name).SetAttributeValue("UseCulturePattern", part.Record.UseCulturePattern);
-            context.Element(part.PartDefinition.Name).SetAttributeValue("PromoteToHomePage", part.PromoteToHomePage);
         }
     }
 }

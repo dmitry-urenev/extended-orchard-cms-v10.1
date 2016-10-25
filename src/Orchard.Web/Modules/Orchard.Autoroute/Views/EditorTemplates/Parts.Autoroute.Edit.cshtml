@@ -24,27 +24,30 @@
     @if (Model.Settings.AllowCustomPattern) {
         <span class="permalink-definition" dir="ltr">
             <span>@Url.MakeAbsolute("/")@urlPrefix</span>
-            <span>@Html.TextBoxFor(m => m.CurrentUrl, new { @class = "text is-url" })</span>
+            <span>@Html.TextBoxFor(m => m.Alias, new { @class = "text is-url" })</span>
         </span>
         <span class="hint">@T("Save the current item and leave the input empty to have it automatically generated using the pattern {0} e.g., {1}.", pattern.ElementAtOrDefault(Convert.ToInt32(defaultPattern.PatternIndex)).Name, pattern.ElementAtOrDefault(Convert.ToInt32(defaultPattern.PatternIndex)).Description)</span>
     }
-    else {
+    else
+    {
         var hintClass = string.Empty;
-        if (!string.IsNullOrEmpty(Model.CurrentUrl)) {
+        if (!string.IsNullOrEmpty(Model.Alias))
+        {
             hintClass = "hint";
-            <span>@Url.MakeAbsolute("/")@urlPrefix@Model.CurrentUrl</span>
+            <span>@Url.MakeAbsolute("/")@urlPrefix</span>
+            <span>@Model.Alias</span>
         }
 
-        if (string.IsNullOrEmpty(Model.CurrentUrl)
-            || (!string.IsNullOrEmpty(Model.CurrentUrl) && Model.Settings.AutomaticAdjustmentOnEdit)) {
+        if (string.IsNullOrEmpty(Model.Alias)
+            || (!string.IsNullOrEmpty(Model.Alias) && Model.Settings.AutomaticAdjustmentOnEdit)) {
             <span class="@hintClass">@T("Save the current item and the url will be generated using the pattern {0} e.g., {1}.", pattern.ElementAtOrDefault(Convert.ToInt32(defaultPattern.PatternIndex)).Name, pattern.ElementAtOrDefault(Convert.ToInt32(defaultPattern.PatternIndex)).Description)</span>
         }
     }
-    @if (!String.IsNullOrEmpty(Model.CurrentUrl)) {
+    @if (!String.IsNullOrEmpty(Model.Alias)) {
         <span>
             @Html.Link(
                 T("View").Text,
-                Url.MakeAbsolute("/") + urlPrefix + Model.CurrentUrl.TrimStart('/'),
+                Url.MakeAbsolute("/") + urlPrefix + Model.Alias.TrimStart('/'),
                 new { target = "_blank" })
         </span>
     }
