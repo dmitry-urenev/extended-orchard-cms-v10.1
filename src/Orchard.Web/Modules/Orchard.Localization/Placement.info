@@ -16,4 +16,8 @@
     <Match DisplayType="SummaryAdmin">
         <Place Parts_Localization_ContentTranslations_SummaryAdmin="Content:5"/>
     </Match>
+    <Match ContentType="MenuItem" DisplayType="NavigationAdmin">
+      <Place Parts_Localization_ContentTranslations_NavigationAdmin="Content:0"/>
+    </Match>
+    <Place CultureSelection="Content:0"/>
 </Placement>

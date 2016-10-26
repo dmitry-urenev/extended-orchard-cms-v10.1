@@ -60,7 +60,7 @@ namespace Orchard.Localization.Services {
         }
 
         IEnumerable<LocalizationPart> ILocalizationService.GetLocalizations(IContent content, VersionOptions versionOptions) {
-            if (content.ContentItem.Id == 0)
+            if (content.ContentItem.Id == 0 || !content.Has<LocalizationPart>()) // new item or item that was created before adding LocalizationPart
                 return Enumerable.Empty<LocalizationPart>();
 
             var localized = content.As<LocalizationPart>();

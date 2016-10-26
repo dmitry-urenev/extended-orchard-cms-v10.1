@@ -29,16 +29,33 @@ namespace Orchard.Localization.Handlers {
 
         public Localizer T { get; set; }
 
-        protected static void PropertySetHandlers(ActivatedContentContext context, LocalizationPart localizationPart) {
-            localizationPart.CultureField.Setter(cultureRecord => {
-                localizationPart.Record.CultureId = cultureRecord.Id;
+        protected static void PropertySetHandlers(ActivatedContentContext context, LocalizationPart localizationPart)
+        {
+            localizationPart.CultureField.Setter(cultureRecord =>
+            {
+                if (cultureRecord != null)
+                {
+                    localizationPart.Record.CultureId = cultureRecord.Id;
+                }
+                else
+                {
+                    localizationPart.Record.CultureId = 0;
+                }
                 return cultureRecord;
             });
-            
-            localizationPart.MasterContentItemField.Setter(masterContentItem => {
-                localizationPart.Record.MasterContentItemId = masterContentItem.ContentItem.Id;
+
+            localizationPart.MasterContentItemField.Setter(masterContentItem =>
+            {
+                if (masterContentItem != null)
+                {
+                    localizationPart.Record.MasterContentItemId = masterContentItem.ContentItem.Id;
+                }
+                else
+                {
+                    localizationPart.Record.MasterContentItemId = 0;
+                }
                 return masterContentItem;
-            });            
+            });
         }
 
         protected void LazyLoadHandlers(LocalizationPart localizationPart) {

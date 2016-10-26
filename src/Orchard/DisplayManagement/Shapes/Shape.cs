@@ -32,6 +32,38 @@ namespace Orchard.DisplayManagement.Shapes {
             Metadata = new ShapeMetadata();
         }
 
+        public virtual Shape Insert(object item, int position)
+        {
+            // pszmyd: Ignoring null shapes 
+            if (item == null)
+            {
+                return this;
+            }
+
+            try
+            {
+                if (item is IHtmlString)
+                {
+                    item = new PositionWrapper((IHtmlString)item, position.ToString());
+                }
+                else if (item is string)
+                {
+                    item = new PositionWrapper((string)item, position.ToString());
+                }
+                else if (item is IShape)
+                {
+                    ((IShape)item).Metadata.Position = position.ToString();
+                }
+            }
+            catch
+            {
+                // need to implement positioned wrapper for non-shape objects
+            }
+
+            _items.Insert(position, item); // not messing with position at the moment
+            return this;
+        }
+
         public virtual Shape Add(object item, string position = null) {
             // pszmyd: Ignoring null shapes 
             if (item == null) {

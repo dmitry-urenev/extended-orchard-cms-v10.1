@@ -95,6 +95,7 @@
     <Compile Include="Controllers\TransliterationAdminController.cs" />
     <Compile Include="Controllers\AdminCultureSelectorController.cs" />
     <Compile Include="Helpers\ContextHelpers.cs" />
+    <Compile Include="ViewModels\AddLocalizationViewModel.cs" />
     <Compile Include="Models\TransliterationSpecificationRecord.cs" />
     <Compile Include="Providers\ContentLocalizationTokens.cs" />
     <Compile Include="Selectors\ContentCultureSelector.cs" />
@@ -197,6 +198,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\CultureSelection.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\EditorTemplates\Parts\Localization.ContentTranslations.Edit - Copy.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

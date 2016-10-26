@@ -2,6 +2,7 @@
 using Orchard.Core.Contents.Extensions;
 using Orchard.Data.Migration;
 using Orchard.Environment.Extensions;
+using System.Linq;
 
 namespace Orchard.Localization {
     public class Migrations : DataMigrationImpl {
@@ -24,6 +25,24 @@ namespace Orchard.Localization {
                 .WithDescription("Provides the user interface to localize content items."));
 
             return 2;
+        }
+
+        public int UpdateFrom2()
+        {
+            if (!ContentDefinitionManager.GetTypeDefinition("Page")
+                .Parts.Any(p => p.PartDefinition.Name == "LocalizationPart"))
+            {
+                ContentDefinitionManager.AlterTypeDefinition("Page", builder => builder
+                    .WithPart("LocalizationPart"));
+            }
+
+            ContentDefinitionManager.AlterTypeDefinition("MenuItem", builder => builder
+                .WithPart("LocalizationPart"));
+
+            ContentDefinitionManager.AlterTypeDefinition("ContentMenuItem", builder => builder
+                .WithPart("LocalizationPart"));
+
+            return 3;
         }
     }
 
