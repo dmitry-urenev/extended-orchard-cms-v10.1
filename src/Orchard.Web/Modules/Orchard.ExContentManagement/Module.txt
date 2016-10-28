@@ -1,0 +1,13 @@
+﻿Name: Advanced Content Management
+AntiForgery: enabled
+Author: The Orchard Team
+Website: http://orchardproject.net
+Version: 1.0
+OrchardVersion: 1.10.1
+Description: Description for the module
+Features:
+    Orchard.ExContentManagement:
+		Name: Advanced Content Management
+		Category: Content
+        Description: Description for feature Orchard.ExContentManagement.
+		Dependencies: Orchard.Bootstrap, Orchard.Localization, Orchard.ContentPermissions, Orchard.Autoroute

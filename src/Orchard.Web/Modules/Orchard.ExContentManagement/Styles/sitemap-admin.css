@@ -1,0 +1,121 @@
+﻿.contentItems.sm-tree
+{
+    margin-top: 15px;
+    border: none;
+    position: relative;
+}
+.contentItems.sm-tree ol 
+{
+    margin-left: 25px;
+    padding: 0;
+}
+.contentItems.sm-tree > ol 
+{
+    margin-left: 0;
+}
+#main .contentItems.sm-tree > ol > li:hover 
+{
+    background-color: transparent;
+} 
+#main .contentItems.sm-tree .item:hover
+{
+    background: #f2fce4;
+}
+
+.contentItems.sm-tree li > div > div
+{
+    padding: 5px 10px;    
+}
+.contentItems.sm-tree .primary 
+{
+    margin-bottom: 0px;
+}
+.contentItems.sm-tree .summary 
+{
+    padding: 2px;        
+    overflow: hidden;    
+}
+.contentItems.sm-tree ol > li
+{
+    padding: 0;
+    border: none;
+}
+.contentItems.sm-tree ol > li .item
+{
+    background: #fff;
+    border: 1px solid #EAEAEA;
+    margin: 2px;    
+    overflow: hidden;
+}
+.contentItems.sm-tree ol > li > div > div  
+{
+    margin-left: 22px !important;
+}
+
+.contentItems.sm-tree .sm-expander {
+    display: none;
+    float: left;
+    width: 16px;
+    height: 16px;
+    margin-top: 11px;
+}
+.contentItems.sm-tree .expandable .sm-expander {
+    display: block;
+}
+
+.contentItems.sm-tree .content-item.expanded > div > .sm-expander
+{
+    background: url('images/minus.gif') 0px 0px no-repeat;  
+    cursor: pointer;
+}
+.contentItems.sm-tree .content-item.collapsed > div > .sm-expander
+{
+    background: url('images/plus.gif') 0px 0px no-repeat;
+    cursor: pointer;
+} 
+.contentItems.sm-tree li.expanded > ol 
+{
+    display: block;
+}
+.contentItems.sm-tree li.collapsed > ol 
+{
+    display: none;
+}
+.contentItems.sm-tree .metadata 
+{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.contentItems.sm-tree .content-description 
+{
+    margin-bottom: 9px;
+}
+.contentItems.sm-tree .item .content .primary,
+.contentItems.sm-tree .item .content .properties .metadata { display: none; }
+
+.contentItems.sm-tree .item.expanded .content .primary,
+.contentItems.sm-tree .item.expanded .content .properties .metadata { display: block; }
+
+
+.l-panel {
+    display: none;
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 0; right: 0;
+    background: rgba(255, 255, 255, 0.64);
+}
+    .l-panel div.affix {
+        top: 20px;
+        right: 70px;
+        margin: 0;
+    }
+
+.l-panel div {
+    background: #fff;
+    padding: 5px 15px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-size: 14px;
+    float: right;    
+    margin: 20px 25px 0 0;
+}

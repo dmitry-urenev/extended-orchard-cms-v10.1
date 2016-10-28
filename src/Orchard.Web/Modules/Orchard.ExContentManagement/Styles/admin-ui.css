@@ -1,0 +1,48 @@
+﻿ .menu-block {
+        display: inline;
+        margin-right: 15px;    
+        position: relative;        
+    }
+    .menu-items-dd {
+        display: none; 
+        position: absolute;
+        padding: 0px;
+        background: #fff;
+        min-width: 200px;
+        border: solid 1px #ccc;
+        top: 100%;
+        left: 0;
+        z-index: 1;
+    }
+    .menu-block:hover .menu-items-dd {
+        display: block;
+    }
+    .menu-items-zone li {
+        border: none;
+        position:initial;
+        padding: 0; margin: 0;
+    }
+    .menu-items-zone li.sep {
+        border-top: dashed 1px #ccc;
+    }
+    .menu-items-zone li a {
+        display: block;
+        border: none; 
+        padding: 5px 10px 3px;
+    }
+        .menu-items-zone li a:hover {
+            background: #f2fce4;
+        }    
+
+        .menu-items-zone li.info {
+            background: none;
+            padding: 10px;
+        }
+
+    .navigation-menu-item.original > div,
+    .navigation-menu-item.original > div:hover {
+        background: #f9f9f9;
+        border-style: dashed;
+        cursor: default;
+    }
+

@@ -1,0 +1,12 @@
+﻿Name: Orchard.Bootstrap
+AntiForgery: enabled
+Author: The Orchard Team
+Website: http://orchardproject.net
+Version: 1.0
+OrchardVersion: 1.8.1
+Description: Description for the module
+Category: CSS Framework
+Features:
+    Orchard.Bootstrap:
+        Description: Description for feature Orchard.Bootstrap.
+		Dependencies: Orchard.jQuery

@@ -1,0 +1,12 @@
+﻿@model Orchard.ExContentManagement.ViewModels.ParentContentPartEditViewModel
+
+@if (Model.ParentContent != null)
+{
+<fieldset>
+    <label>@T("Parent content")</label>
+    <div class="parent-contentItem">        
+        @Html.ItemEditLink(Model.ParentContent)
+        @Html.HiddenFor(m=>m.ParentId)
+    </div>    
+</fieldset>
+}

@@ -1,0 +1,439 @@
+﻿@using Orchard.ExContentManagement.ViewModels;
+@using Orchard.ContentManagement;
+@using Orchard.Core.Contents.ViewModels;
+@using Orchard.ContentManagement.Aspects;
+@{
+    var typeDisplayName = Model.TypeDisplayName;
+    var pageTitle = T("Manage Content");
+    var createLinkText = T("Create New Content...");
+    if (!string.IsNullOrWhiteSpace(typeDisplayName))
+    {
+        pageTitle = T("Manage Content > {0}", typeDisplayName);
+        createLinkText = T("Create New {0}", typeDisplayName);
+    }
+
+    Layout.Title = pageTitle;
+    Style.Include("sitemap-admin.css");
+    Style.Include("admin-ui.css");
+
+    Script.Require("jQuery");
+    Script.Require("jQueryUI_Sortable").AtFoot();   
+    Script.Include("jquery.mjs.nestedSortable.js").AtFoot();
+
+    Script.Require("Bootstrap").AtFoot();
+    Style.Require("BootstrapAdmin");
+}
+<style type="text/css">
+    #main .contentItems > ul > li:nth-child(even), ul.contentItems > li:nth-child(even), table.items tr:nth-child(even) {
+        background: #fff;
+    }
+
+    .show-filter {
+        margin-right: 15px;
+    }
+
+    bulk-actions {
+        margin-right: 0;
+    }
+
+    .bulk-actions-auto {
+        display: inline;
+    }
+
+        .bulk-actions-auto label {
+            display: inline;
+            margin-left: 5px;
+        }
+
+        .bulk-actions-auto.right {
+            float: right;
+        }
+
+    #wndCreate .ctype a {
+        display: block;
+        padding: 3px 10px;
+    }
+        #wndCreate .ctype a:hover {
+            background: #f2fce4;
+        }
+
+    #wndCreate .ctype.selected a,
+    #wndCreate .ctype.selected a:hover {
+        background: #6a7b42;
+        color: #fff;
+    }
+
+    .page-placeholder {
+        background-color: #e9ffb4;        
+        margin: 2px 2px 2px 22px !important;
+    }
+</style>
+@helper RenderNodes(IEnumerable<PagesHListViewModel.HEntry> entries, int l)
+{
+    <ol class="sm-level sm-level-@l">
+        @foreach (var n in entries)
+        {
+            <li class="content-item @(n.ChildEntries.Count() > 0 ? "expandable expanded" : "")">                
+                <div>
+                    <span class="sm-expander"></span>
+                    <div class="item expanded">
+                        @*@if (n.ContentItem != null)
+                {
+                    @Html.ItemAdminLink(n.ContentItem)
+                    <span class="sm-nd-expander"></span>
+                }
+                else
+                {
+                    @Html.Link(n.ContentItem.As<ITitleAspect>().Title, n.ContentItem.As<IAliasAspect>().Path)
+                }
+                @if (n.ContentItem != null)
+                {*@
+                        <div class="content">
+                            @Display(BuildDisplay(n.ContentItem, "SummaryAdmin"))
+                        </div>
+                        @*}*@
+                    </div>
+                </div>
+                @if (n.ChildEntries.Any())
+                {
+                    @RenderNodes(n.ChildEntries, l + 1)
+                }                
+            </li>
+        }
+    </ol>
+}
+@using (Html.BeginFormAntiForgeryPost("List", FormMethod.Post, new { lang = Model.SelectedCulture }))
+{
+    <fieldset class="bulk-actions-auto show-filter">
+        <label for="filterResults" class="bulk-filter">@T("Show")</label>
+        <select id="filterResults" name="Options.SelectedFilter">
+            @Html.SelectOption((string)Model.Options.SelectedFilter, "", T("any (show all)").ToString())
+            @foreach (var filterOption in Model.Options.FilterOptions)
+            {
+                @Html.SelectOption((string)Model.Options.SelectedFilter, (string)filterOption.Key, (string)filterOption.Value)
+            }
+        </select>
+        <button type="submit" name="submit.Filter" class="apply-bulk-actions-auto" value="yes please">@T("Apply")</button>
+    </fieldset>
+    <fieldset class="bulk-actions">
+        <div class="menu-block">
+            @if (string.IsNullOrWhiteSpace(typeDisplayName))
+            {
+                <a href="javascript:void(0);">@createLinkText.Text</a>
+                <div class="menu-items-dd">
+                    <ul class="menu-items-zone">
+                        @foreach (var filterOption in Model.Options.FilterOptions)
+                        {
+                            <li class="menu-item">
+                                <a href="@Url.Action("Create", new { Area = "Orchard.ExContentManagement", Id = (string)filterOption.Key, returnUrl = Request.RawUrl })">
+                                    <span class="title">@filterOption.Key</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+            else
+            {
+                @Html.ActionLink(createLinkText.Text, "Create", new { Area = "Orchard.ExContentManagement", Id = (string)Model.Options.SelectedFilter, returnUrl = Request.RawUrl })
+            }
+        </div>
+    </fieldset>
+    <fieldset class="bulk-actions">
+        <div class="menu-block" id="actions">
+            <a href="javascript:void(0);">@T("Actions...")</a>
+            <div class="menu-items-dd">
+                <ul class="menu-items-zone">
+                    <li class="menu-item">
+                        <a href="javascript:void(0);" onclick="toggleAllSummary(true)">
+                            <span class="title">@T("Expand All Summaries")</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="javascript:void(0);" onclick="toggleAllSummary(false)">
+                            <span class="title">@T("Collapse All Summaries")</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="javascript:void(0);" onclick="toggleNodes(true)">
+                            <span class="title">@T("Expand All Nodes")</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="javascript:void(0);" onclick="toggleNodes(false)">
+                            <span class="title">@T("Collapse All Nodes")</span>
+                        </a>
+                    </li>
+                    <li class="sep"></li>
+                    <li class="menu-item info">
+                        <i>@T("Please select one or more content items to see available actions")</i>
+                    </li>
+                    <li class="menu-item selection">
+                        <a href="javascript:void(0);" action="@ContentsBulkAction.PublishNow">
+                            <span class="title">@T("Publish Now")</span>
+                        </a>
+                    </li>
+                    <li class="menu-item selection">
+                        <a href="javascript:void(0);" action="@ContentsBulkAction.Unpublish">
+                            <span class="title">@T("Unpublish")</span>
+                        </a>
+                    </li>
+                    <li class="menu-item selection">
+                        <a href="javascript:void(0);" action="@ContentsBulkAction.Remove">
+                            <span class="title">@T("Delete")</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <input type="hidden" name="Options.BulkAction" value="@ContentsBulkAction.None" />
+        <button type="submit" name="submit.BulkEdit" class="apply-bulk-actions-auto" value="yes">@T("Apply")</button>
+    </fieldset>
+    <fieldset class="bulk-actions-auto right">
+        <label for="orderResults" class="bulk-order">@T("Ordered by")</label>
+        <select id="orderResults" name="Options.OrderBy">
+            @Html.SelectOption((ContentsOrder)Model.Options.OrderBy, ContentsOrder.Created, T("recently created").ToString())
+            @Html.SelectOption((ContentsOrder)Model.Options.OrderBy, ContentsOrder.Modified, T("recently modified").ToString())
+            @Html.SelectOption((ContentsOrder)Model.Options.OrderBy, ContentsOrder.Published, T("recently published").ToString())
+        </select>
+        <label for="contentResults" class="bulk-order">@T("Filter by")</label>
+        <select id="contentResults" name="Options.ContentsStatus">
+            @Html.SelectOption((ContentsStatus)Model.Options.ContentsStatus, ContentsStatus.Latest, T("latest").ToString())
+            @Html.SelectOption((ContentsStatus)Model.Options.ContentsStatus, ContentsStatus.Published, T("published").ToString())
+            @Html.SelectOption((ContentsStatus)Model.Options.ContentsStatus, ContentsStatus.Draft, T("unpublished").ToString())
+            @*@Html.SelectOption((ContentsStatus)Model.Options.ContentsStatus, ContentsStatus.AllVersions, T("all versions").ToString())*@
+        </select>
+        @if (Model.IsMultyLanguageSite)
+        {
+            <label for="languageSelector" class="bulk-order">@T("Language:")</label>
+            <select id="languageSelector" name="selectedCulture">
+                @foreach (string lang in Model.AvailableCultures)
+                {
+                    @Html.SelectOption(lang, (string)Model.SelectedCulture == lang, lang)
+                }
+            </select>
+        }
+        <button type="submit" name="submit.Filter" class="apply-bulk-actions-auto" value="yes please">@T("Apply")</button>
+    </fieldset>
+
+    <div class="contentItems bulk-items sm-tree">
+        @RenderNodes(Model.Entries, 0)
+        <div class="l-panel"><div data-spy="affix" data-offset-top="20" data-offset-right="70">Loading...</div></div>
+    </div>
+    @Display(Model.Pager)
+}
+
+<!-- Create child Modal -->
+<div id="wndCreate" class="modal" tabindex="-1" role="dialog" aria-labelledby="txtTitle" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="txtTitle">New Content</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="availableTypes">
+                    @foreach (var filterOption in Model.Options.FilterOptions)
+                    {
+                        <li class="ctype">
+                            <a href="@Url.Action("Create", new { Area = "Orchard.ExContentManagement", Id = (string)filterOption.Key, returnUrl = Request.RawUrl })">
+                                <span class="title">@filterOption.Key</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Script.Foot())
+{
+    <script type="text/javascript">
+        //<![CDATA[
+        function toogleSummary(item) {
+            $(item).toggleClass("expanded");
+        }
+        function toggleAllSummary(show) {
+            if (show) {
+                $(".sm-tree .item").addClass("expanded");
+            } else {
+                $(".sm-tree .item").removeClass("expanded");
+            }
+        }
+        function toggleNodes(show) {
+            if (show) {
+                $(".sm-tree .expandable")
+                    .removeClass("collapsed")
+                    .addClass("expanded");
+            } else {
+                $(".sm-tree .expandable")
+                    .removeClass("expanded")
+                    .addClass("collapsed");
+            }
+        }
+
+        (function ($) {
+            var actions = $("#actions a").click(function () {
+                var actionId = $(this).attr("action");
+                if (actionId) {
+                    $("input[name='Options.BulkAction']").val(actionId);
+                    $("button[name='submit.BulkEdit']").click();
+                }
+            });
+
+            var toggleActions = function (show) {
+                if (show) {
+                    $("#actions li.selection").show();
+                    $("#actions li.info").hide();
+                } else {
+                    $("#actions li.selection").hide();
+                    $("#actions li.info").show();
+                }
+            }
+
+            var chbx = $("input[name=itemIds]").click(function (e) {
+                var selected = $("input[name=itemIds]:checked").length;
+                toggleActions(selected > 0);
+                e.stopPropagation();
+            });           
+
+            toggleActions(false);
+
+            var contentItems = $(".sm-tree .item");
+            contentItems.each(function (idx, c) {
+                $(c).click(function (e) {
+                    if (e.target.tagName != "A")
+                        toogleSummary(this);
+                });
+                var titleLink = $(c).children("a")[0];
+                $(titleLink).click(function (e) {
+                    e.preventDefault();
+                });
+            });
+            var expanded = $(".sm-tree .sm-expander");
+            expanded.click(function () {
+                $(this).closest("li")
+                .toggleClass("expanded")
+                .toggleClass("collapsed");
+            });
+
+            $("#wndCreate .ctype a").click(function () {
+                $(this).parent()
+                    .addClass("selected")
+                .siblings()
+                    .removeClass("selected");
+
+                return false;
+            });
+
+            $("#wndCreate .btn-primary").click(function () {
+                var selected = $("#wndCreate .ctype.selected")[0];
+                if (selected) {
+                    var url = $("a", selected).attr("href").split("?")[0];
+                    if ($("#wndCreate").data("qs")) {
+                        url = url + "?" + $("#wndCreate").data("qs");
+                        $("#wndCreate").data("qs", null);
+                    }
+                    window.location = url;
+                    $("#wndCreate").modal('hide');
+                }
+            });
+
+            $("a[itemprop=CreateChild]").click(function () {
+                var _this = $(this);
+                var hrefParts = _this.attr("href").split("?");
+                
+                $("#wndCreate").modal().data("qs", hrefParts[1]);
+                
+                return false;
+            });
+
+
+            $('.sm-tree > ol').nestedSortable({
+                disableNesting: 'no-nest',
+                forcePlaceholderSize: true,
+                handle: 'div',
+                helper: 'clone',
+                items: 'li.content-item:not(.original)',
+                maxLevels: 6,
+                opacity: 1,
+                placeholder: 'page-placeholder',
+                revert: 50,
+                tabSize: 30,
+                tolerance: 'pointer',
+                toleranceElement: '> div',
+           
+                stop: function (event, ui) {
+                    setTimeout(function () {
+                        updateTreeNodes();
+                        updateParent(ui.item);
+                    }, 100);
+                }
+            });
+
+        })(jQuery);
+
+        function updateTreeNodes() {
+            $(".sm-tree .content-item").each(function (idx, el) {
+                var $this = $(el);
+
+                if ($("> ol", $this).length != 0) {
+                    $this.addClass("expandable");
+                    if (!$this.hasClass("collapsed"))
+                        $this.addClass("expanded");
+                } else {
+                    $this.removeClass("expandable")
+                    .removeClass("expanded")
+                    .removeClass("collapsed");
+                }
+            });
+        }
+        
+        function updateParent(listItem) {
+            var itemId = $("> div .summary", listItem).attr("itemid");
+            var oldUrl = $("> div .summary .related a:first-child", listItem).attr("href");
+            var parent = listItem.parent(),
+                parentId = 0;
+            if (!parent.hasClass("sm-level-0")) {
+                parent = parent.closest("li");
+                parentId = $("> div .summary", parent).attr("itemid");
+            }
+
+            $(".l-panel").show();            
+            $.ajax({
+                url: "@(Url.Action("SetParent", new { Area = "Orchard.ExContentManagement" }))",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "id": itemId,
+                    "parentId": parentId,
+                    "__RequestVerificationToken": $('[name=__RequestVerificationToken]').val()
+                },
+                success: function (result) {                    
+                    if (result.success) {
+                        console.log(listItem);
+                        var btnView = $(".summary .related a:first-child", listItem);
+                        btnView.each(function (idx, el) {
+                            if (el.href) {
+                                el.href = el.href.replace(oldUrl, result.itemUrl);
+                            }
+                        });
+                    }
+                    $(".l-panel").hide();
+                },
+                error: function (x, r, m) {
+                    $(".l-panel").hide();
+                    alert("error");
+                }
+            });
+        }
+
+        //]]>
+    </script>
+            
+}

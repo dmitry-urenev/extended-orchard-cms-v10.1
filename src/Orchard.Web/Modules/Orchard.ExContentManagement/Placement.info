@@ -1,0 +1,7 @@
+﻿<Placement>
+  <Place Parts_ContentManagement_ParentContent_Edit="Content:before.50"/>
+  <Match DisplayType="SummaryAdmin">
+    <Place Parts_ContentManagement_ParentContent_SummaryAdmin="Actions:11"/>
+  </Match>
+  <Place Parts_Autoroute_Edit="Content:before.51;Alternate=Parts_ContentManagement_Autoroute_Edit"/>
+</Placement>

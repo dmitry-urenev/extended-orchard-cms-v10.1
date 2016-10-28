@@ -276,7 +276,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orchard.Conditions", "Orcha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orchard.Resources", "Orchard.Web\Modules\Orchard.Resources\Orchard.Resources.csproj", "{D4E8F7C8-2DB2-4C50-A422-DA1DF1E3CC73}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orchard.ExContentManagement", "Orchard.Web\Modules\Orchard.ExContentManagement\Orchard.ExContentManagement.csproj", "{4C888B40-A726-43F7-A577-AA720A29DCF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orchard.Bootstrap", "Orchard.Web\Modules\Orchard.Bootstrap\Orchard.Bootstrap.csproj", "{392FD402-6AB6-45A9-AA38-2518AEE8B304}"
+EndProject
 Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CodeCoverage|Any CPU = CodeCoverage|Any CPU
 		Coverage|Any CPU = Coverage|Any CPU
@@ -1102,6 +1109,26 @@ Global
 		{D4E8F7C8-2DB2-4C50-A422-DA1DF1E3CC73}.FxCop|Any CPU.ActiveCfg = Release|Any CPU
 		{D4E8F7C8-2DB2-4C50-A422-DA1DF1E3CC73}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4E8F7C8-2DB2-4C50-A422-DA1DF1E3CC73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C888B40-A726-43F7-A577-AA720A29DCF4}.CodeCoverage|Any CPU.ActiveCfg = Release|Any CPU
+		{4C888B40-A726-43F7-A577-AA720A29DCF4}.CodeCoverage|Any CPU.Build.0 = Release|Any CPU
+		{4C888B40-A726-43F7-A577-AA720A29DCF4}.Coverage|Any CPU.ActiveCfg = Release|Any CPU
+		{4C888B40-A726-43F7-A577-AA720A29DCF4}.Coverage|Any CPU.Build.0 = Release|Any CPU
+		{4C888B40-A726-43F7-A577-AA720A29DCF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C888B40-A726-43F7-A577-AA720A29DCF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C888B40-A726-43F7-A577-AA720A29DCF4}.FxCop|Any CPU.ActiveCfg = Release|Any CPU
+		{4C888B40-A726-43F7-A577-AA720A29DCF4}.FxCop|Any CPU.Build.0 = Release|Any CPU
+		{4C888B40-A726-43F7-A577-AA720A29DCF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C888B40-A726-43F7-A577-AA720A29DCF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{392FD402-6AB6-45A9-AA38-2518AEE8B304}.CodeCoverage|Any CPU.ActiveCfg = Release|Any CPU
+		{392FD402-6AB6-45A9-AA38-2518AEE8B304}.CodeCoverage|Any CPU.Build.0 = Release|Any CPU
+		{392FD402-6AB6-45A9-AA38-2518AEE8B304}.Coverage|Any CPU.ActiveCfg = Release|Any CPU
+		{392FD402-6AB6-45A9-AA38-2518AEE8B304}.Coverage|Any CPU.Build.0 = Release|Any CPU
+		{392FD402-6AB6-45A9-AA38-2518AEE8B304}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{392FD402-6AB6-45A9-AA38-2518AEE8B304}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{392FD402-6AB6-45A9-AA38-2518AEE8B304}.FxCop|Any CPU.ActiveCfg = Release|Any CPU
+		{392FD402-6AB6-45A9-AA38-2518AEE8B304}.FxCop|Any CPU.Build.0 = Release|Any CPU
+		{392FD402-6AB6-45A9-AA38-2518AEE8B304}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{392FD402-6AB6-45A9-AA38-2518AEE8B304}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1189,6 +1216,8 @@ Global
 		{90EBEE36-B5CD-42A8-A21B-76270E2C5D24} = {DF3909B0-1DDD-4D8A-9919-56FC438E25E2}
 		{98251EAE-A41B-47B2-AA91-E28B8482DA70} = {E9C9F120-07BA-4DFB-B9C3-3AFB9D44C9D5}
 		{D4E8F7C8-2DB2-4C50-A422-DA1DF1E3CC73} = {E9C9F120-07BA-4DFB-B9C3-3AFB9D44C9D5}
+		{4C888B40-A726-43F7-A577-AA720A29DCF4} = {E9C9F120-07BA-4DFB-B9C3-3AFB9D44C9D5}
+		{392FD402-6AB6-45A9-AA38-2518AEE8B304} = {E9C9F120-07BA-4DFB-B9C3-3AFB9D44C9D5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\TransientFaultHandling.Core.5.1.1209.1\lib\NET4

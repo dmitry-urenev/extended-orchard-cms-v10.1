@@ -1,0 +1,8 @@
+﻿@using Orchard.ExContentManagement.Views;
+@using Orchard.ContentManagement;
+@using Orchard.ExContentManagement.Models;
+
+@if ((Model.ContentItem as IContent).Has<ParentContentPart>())
+{
+    @Html.ItemCreateLinkWithReturnUrl("Create child", Model.ContentItem as IContent, new { parentId = Model.ContentItem.Id }, new { itemprop = "CreateChild" }) @:|
+}

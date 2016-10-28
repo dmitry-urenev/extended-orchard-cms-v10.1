@@ -1,0 +1,122 @@
+﻿@using Orchard.Autoroute;
+@using Orchard.Utility.Extensions;
+@using Orchard.Environment.Configuration;
+@using Orchard.ContentManagement;
+@using Orchard.ExContentManagement.Models;
+@using Orchard.ExContentManagement.Aliases;
+@using Orchard.Autoroute.Models;
+@using Orchard.Localization.Models;
+@{
+    var viewModel = Model.Model as Orchard.Autoroute.ViewModels.AutoroutePartEditViewModel;
+    var contentItem = Model.ContentItem as ContentItem;
+
+    var aliasData = WorkContext.Resolve<Orchard.ExContentManagement.Aliases.IAliasFactory>().BuidFor(contentItem);
+    
+    var parentContent = contentItem.Has<ParentContentPart>() ? contentItem.As<ParentContentPart>().ParentContent : null;
+    var hasParent = parentContent != null;
+    var parentUrl = aliasData.Segments.Get("{Parent}");
+    string slug = aliasData.Segments.Get("{Slug}");
+
+    string prefx = Model.Prefix;
+}
+
+@if (viewModel.Settings.Patterns.Where(x => x.Culture == viewModel.CurrentCulture).Count() == 0)
+{
+    <div class="message message-Error">@T("The current Content Type does not have a default Autoroute Pattern. Please edit the settings first.")</div>
+    return;
+}
+
+@{
+    var defaultPattern = viewModel.Settings.DefaultPatterns.Where(x => x.Culture == viewModel.CurrentCulture).FirstOrDefault();
+    var pattern = viewModel.Settings.Patterns.Where(x => x.Culture == viewModel.CurrentCulture);
+
+    var urlPrefix = WorkContext.Resolve<ShellSettings>().RequestUrlPrefix;
+    if (!String.IsNullOrWhiteSpace(urlPrefix))
+    {
+        urlPrefix += "/";
+    }
+}
+<fieldset class="permalink">
+    <label>@T("Permalink")</label>
+    @if (viewModel.Settings.AllowCustomPattern)
+    {
+        <span>@ViewContext.RequestContext.HttpContext.Request.ToApplicationRootUrlString()/@urlPrefix</span>
+        <span id="urlPartsPreview">@(!string.IsNullOrEmpty(parentUrl) ? (parentUrl + "/") : "")</span>            
+        @*<span><input type="text" class="text" id="autoroteSlug" value="@slug" /></span>*@                
+        <span>@Html.TextBox(prefx + ".Alias", viewModel.Alias, new { @class = "text" })</span>
+        <input type="hidden" name="@(prefx + ".Url")" value="@(!string.IsNullOrEmpty(parentUrl) ? parentUrl : "")" id="urlParts" />
+    }
+    else
+    {
+        <span>@ViewContext.RequestContext.HttpContext.Request.ToApplicationRootUrlString()/@urlPrefix</span>            
+    }        
+    <span class="hint">@T("Save the current item and leave the input empty to have it automatically generated using the pattern {0} e.g., {1}.", pattern.ElementAtOrDefault(Convert.ToInt32(defaultPattern.PatternIndex)).Name, pattern.ElementAtOrDefault(Convert.ToInt32(defaultPattern.PatternIndex)).Description)</span>
+</fieldset>
+
+@if (!viewModel.IsHomePage)
+{
+    if (AuthorizedFor(Permissions.SetHomePage))
+    {
+        <fieldset class="promoteToHomePage">
+            <span class="checkbox-and-label">
+                @Html.CheckBox(prefx + ".PromoteToHomePage", viewModel.PromoteToHomePage)
+                <label for="@Html.FieldIdFor(m => viewModel.PromoteToHomePage)" class="forcheckbox">@T("Set as home page")</label>
+            </span>
+            <span class="hint">@T("Check to promote this content as the home page")</span>
+        </fieldset>
+    }
+}
+else
+{
+    <fieldset>
+        <span>@T("This content is the current home page")</span>
+    </fieldset>
+}
+
+@using (Script.Foot())
+{    
+    <script type="text/javascript">    
+        //<![CDATA[         
+
+    (function ($) {
+        var urlParts = $("#urlParts");              
+        
+        UpdateAlias();
+
+        if (!@(hasParent.ToString().ToLower()))
+        {        
+            var cultureSelector = $("#cultureSelector");
+            var selectedCulture = $("#selectedCulture");
+            var siteCulture = $("#siteCulture").val().toLowerCase();
+            
+            var setLanguage = function(lang) {                
+                if (lang != siteCulture) 
+                    urlParts.val(lang);                        
+                else 
+                    urlParts.val("");                        
+                UpdateAlias();
+            };
+
+            if (cultureSelector[0]) {
+                cultureSelector.change(function() {
+                    setLanguage(cultureSelector.val().toLowerCase());
+                });                
+                setLanguage(cultureSelector.val().toLowerCase());
+            } else if (selectedCulture[0]) {                    
+                setLanguage(selectedCulture.val().toLowerCase());
+            }            
+        }
+    
+    })(jQuery);
+
+        function UpdateAlias() {
+            var urlPartsValue = $("#urlParts").val();          
+           
+            if (urlPartsValue == "")
+                $("#urlPartsPreview").text("");
+            else
+                $("#urlPartsPreview").text(urlPartsValue + "/");
+        }
+//]]>
+</script>
+}
