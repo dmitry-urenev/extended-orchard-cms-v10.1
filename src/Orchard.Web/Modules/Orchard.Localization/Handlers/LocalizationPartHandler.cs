@@ -10,7 +10,8 @@ namespace Orchard.Localization.Handlers {
         private readonly ICultureManager _cultureManager;
         private readonly IContentManager _contentManager;
 
-        public LocalizationPartHandler(IRepository<LocalizationPartRecord> localizedRepository, ICultureManager cultureManager, IContentManager contentManager) {
+        public LocalizationPartHandler(IRepository<LocalizationPartRecord> localizedRepository, ICultureManager cultureManager, IContentManager contentManager)
+        {
             _cultureManager = cultureManager;
             _contentManager = contentManager;
             T = NullLocalizer.Instance;

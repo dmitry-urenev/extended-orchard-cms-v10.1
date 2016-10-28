@@ -1,0 +1,71 @@
+﻿@using System.Globalization
+@model Orchard.Localization.Models.CultureSwitcherPart
+
+@{
+    Script.Require("jQuery");
+    Script.Require("jQueryUI");
+
+    Style.Require("jQueryUI_Orchard").AtHead();
+    Style.Include("switcher").AtHead();
+}
+
+<fieldset>
+
+    <legend>@T("Common Settings")</legend>
+
+    <p class="culture-switcher-block">
+        @Html.LabelFor(m => m.DisplayMode, T("Display Mode"))
+        @Html.DropDownListFor(m => m.DisplayMode, new[]
+        {
+            new SelectListItem() { Text = "Bulleted List", Value = "1" },
+            new SelectListItem() { Text = "Dropdown List", Value = "2" },
+        })
+    </p>
+
+    <p class="culture-switcher-block">
+        @Html.LabelFor(m => m.DisplayType, T("Display Type"))
+        @Html.DropDownListFor(m => m.DisplayType, new[]
+        {
+            new SelectListItem() { Text = "Culture", Value = "1" },
+            new SelectListItem() { Text = "Language", Value = "2" },
+            new SelectListItem() { Text = "Native Language", Value = "3" },
+            new SelectListItem() { Text = "Language with Country", Value = "4" },
+            new SelectListItem() { Text = "Native Language with Country", Value = "5" },
+            new SelectListItem() { Text = "TwoLetter Language", Value = "6" },
+        })
+    </p>
+
+    <legend>@T("Culture Ordering")</legend>
+
+    <p class="culture-switcher-block">
+        <span class="hint">@T("You can drag and drop dies to change cultures order")</span>
+
+        <ul id="sortable">
+            @foreach (var culture in Model.AvailableCultures)
+            {
+                <li class="ui-state-default">
+                    <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+                    @Html.Hidden("AvailableCultures", culture)
+                    @{ var cultureInfo = new CultureInfo(culture); }
+                    @cultureInfo.NativeName [@culture]
+                </li>
+            }
+        </ul>
+    </p>
+
+    <p class="culture-switcher-block">
+        <a href="@Url.Action("Culture", "Admin", new { area = "Settings" })" target="_blank">@(T("Add or remove supported cultures for the site"))</a>
+    </p>
+
+
+</fieldset>
+
+@using (Script.Foot())
+{
+    <script>
+        $(function () {
+            $("#sortable").sortable();
+            $("#sortable").disableSelection();
+        });
+    </script>
+}

@@ -7,9 +7,10 @@ using Orchard.Environment.Extensions;
 using Orchard.Localization.Services;
 using Orchard.Environment.Configuration;
 
-namespace Orchard.Localization.Selectors {
-    [OrchardFeature("Orchard.Localization.CultureSelector")]
-    public class ContentCultureSelector : ICultureSelector {
+namespace Orchard.Localization.Selectors
+{
+    public class ContentCultureSelector : ICultureSelector
+    {
         private readonly IAliasService _aliasService;
         private readonly IContentManager _contentManager;
         private readonly Lazy<ILocalizationService> _localizationService;
@@ -19,19 +20,22 @@ namespace Orchard.Localization.Selectors {
             IAliasService aliasService,
             IContentManager contentManager,
             Lazy<ILocalizationService> localizationService,
-            ShellSettings shellSettings) {
+            ShellSettings shellSettings)
+        {
             _aliasService = aliasService;
             _contentManager = contentManager;
             _localizationService = localizationService;
             _shellSettings = shellSettings;
         }
 
-        public CultureSelectorResult GetCulture(HttpContextBase context) {
+        public CultureSelectorResult GetCulture(HttpContextBase context)
+        {
             if (context == null || ContextHelpers.IsRequestAdmin(context)) return null;
 
             // Attempt to determine culture by previous route if by POST
             string path;
-            if (context.Request.HttpMethod.Equals(HttpVerbs.Post.ToString(), StringComparison.OrdinalIgnoreCase)) {
+            if (context.Request.HttpMethod.Equals(HttpVerbs.Post.ToString(), StringComparison.OrdinalIgnoreCase))
+            {
                 if (context.Request.UrlReferrer != null)
                     path = context.Request.UrlReferrer.AbsolutePath;
                 else
@@ -45,28 +49,33 @@ namespace Orchard.Localization.Selectors {
             var requestUrl = (path.StartsWith(appPath) ? path.Substring(appPath.Length) : path).TrimStart('/');
 
             var prefix = _shellSettings.RequestUrlPrefix;
-            if (!string.IsNullOrEmpty(prefix)) {
+            if (!string.IsNullOrEmpty(prefix))
+            {
                 requestUrl = (requestUrl.StartsWith(prefix) ? requestUrl.Substring(prefix.Length) : requestUrl).TrimStart('/');
             }
 
             var content = GetByPath(requestUrl);
-            if (content != null) {
-                return new CultureSelectorResult { Priority = -2, CultureName = _localizationService.Value.GetContentCulture(content) };
+            if (content != null)
+            {
+                return new CultureSelectorResult { Priority = -1, CultureName = _localizationService.Value.GetContentCulture(content) };
             }
 
             return null;
         }
 
-        public IContent GetByPath(string aliasPath) {
+        public IContent GetByPath(string aliasPath)
+        {
             var contentRouting = _aliasService.Get(aliasPath);
 
             if (contentRouting == null)
                 return null;
 
             object id;
-            if (contentRouting.TryGetValue("id", out id)) {
+            if (contentRouting.TryGetValue("id", out id))
+            {
                 int contentId;
-                if (int.TryParse(id as string, out contentId)) {
+                if (int.TryParse(id as string, out contentId))
+                {
                     return _contentManager.Get(contentId);
                 }
             }

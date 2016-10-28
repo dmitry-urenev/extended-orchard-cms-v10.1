@@ -69,7 +69,9 @@ namespace Orchard.Localization.Drivers
                                 AllowAddTranslations: allowAddTranslations, TargetCulture: selectedAdminCulture)),
                     ContentShape("Parts_Localization_ContentTranslations_NavigationAdmin",
                         () => shapeHelper.Parts_Localization_ContentTranslations_NavigationAdmin(MasterId: masterId, Culture: currentCulture, Localizations: exisingLocalizations,
-                                AllowAddTranslations: allowAddTranslations, TargetCulture: selectedAdminCulture))
+                                AllowAddTranslations: allowAddTranslations, TargetCulture: selectedAdminCulture)),
+                    ContentShape("Parts_Localization_DeleteWithTranslations_SummaryAdmin",
+                        () => shapeHelper.Parts_Localization_DeleteWithTranslations_SummaryAdmin())
                     );
             }
             else

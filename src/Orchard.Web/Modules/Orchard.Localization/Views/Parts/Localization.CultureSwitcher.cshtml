@@ -1,0 +1,86 @@
+﻿@using System.Diagnostics
+@using System.Globalization
+@using Orchard.Localization.Models
+
+@{
+    var availableCultures = Model.AvailableCultures as List<string>;
+
+    if (Model.DisplayMode == 0)
+    {
+        Model.DisplayMode = (int) DisplayModes.DropdownList;
+    }
+
+    var availableCultureswithNames = new List<KeyValuePair<string, string>>(availableCultures.Count);
+    foreach (string culture in availableCultures)
+    {
+        try
+        {
+            var cultureInfo = new CultureInfo(culture);
+            string name = culture;
+            switch ((DisplayTypes)Model.DisplayType)
+            {
+                case DisplayTypes.Language:
+                    name = cultureInfo.IsNeutralCulture ? cultureInfo.EnglishName : cultureInfo.Parent.EnglishName;
+                    break;
+                case DisplayTypes.NativeLanguage:
+                    name = cultureInfo.IsNeutralCulture ? cultureInfo.NativeName : cultureInfo.Parent.NativeName;
+                    break;
+                case DisplayTypes.LanguageWithCountry:
+                    name = cultureInfo.DisplayName;
+                    break;
+                case DisplayTypes.NativeLanguageWithCountry:
+                    name = cultureInfo.NativeName;
+                    break;
+                case DisplayTypes.TwoLetterLanguage:
+                default:
+                    name = cultureInfo.TwoLetterISOLanguageName;
+                    break;
+            }
+            availableCultureswithNames.Add(new KeyValuePair<string, string>(culture, name));
+        }
+        catch
+        {
+            availableCultureswithNames.Add(new KeyValuePair<string, string>(culture, culture));
+        }
+    }
+}
+
+@using (Html.BeginForm("ChangeCulture", "UserCulture", new { Area = "Orchard.Localization" }, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    if (Model.DisplayMode == (int)DisplayModes.DropdownList)
+    {
+        <div class="culture-switcher-container">
+            @Html.DropDownList("CultureName", new SelectList(availableCultureswithNames, "Key", "Value", Model.UserCulture), new { onchange = "submit()" })
+        </div>
+    }
+
+    if (Model.DisplayMode == (int)DisplayModes.BulletedList)
+    {
+        <div class="culture-switcher-container">
+            @Html.Hidden("CultureName")
+            <ul>
+                @foreach (var culture in availableCultureswithNames)
+                {
+                    <li><a data-culture="@culture.Key">@culture.Value</a></li>
+                }
+            </ul>
+        </div>
+
+        using (Script.Foot())
+        {
+            Script.Require("jQuery").AtFoot();
+
+            <script>
+                $(function () {
+                    $('.culture-switcher-container a').click(function () {
+                        $('#CultureName').val($(this).attr('data-culture'));
+                        $(this).closest('form').submit();
+                    });
+                })
+            </script>
+        }
+    }
+}
+

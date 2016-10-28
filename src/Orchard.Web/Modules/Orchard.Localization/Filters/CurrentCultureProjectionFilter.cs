@@ -4,16 +4,17 @@ using Orchard.Events;
 using Orchard.Localization.Models;
 using Orchard.Localization.Services;
 
-namespace Orchard.Localization.Projections {
+namespace Orchard.Localization.Filters
+{
     public interface IFilterProvider : IEventHandler {
         void Describe(dynamic describe);
     }
 
-    public class CurrentCultureFilter : IFilterProvider {
+    public class CurrentCultureProjectionFilter : IFilterProvider {
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly ICultureManager _cultureManager;
 
-        public CurrentCultureFilter(IWorkContextAccessor workContextAccessor, ICultureManager cultureManager) {
+        public CurrentCultureProjectionFilter(IWorkContextAccessor workContextAccessor, ICultureManager cultureManager) {
             _workContextAccessor = workContextAccessor;
             _cultureManager = cultureManager;
             T = NullLocalizer.Instance;

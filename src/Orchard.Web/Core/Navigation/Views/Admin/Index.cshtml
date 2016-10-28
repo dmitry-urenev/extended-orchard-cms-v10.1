@@ -112,6 +112,7 @@
                 <div>
                     <h2>@menuPartEntry.Text</h2>
                     <span class="navigation-type">(@menuPartEntry.ContentItem.TypeDefinition.DisplayName)</span>
+                    @Display(BuildDisplay(menuPartEntry.ContentItem, "NavigationAdmin").Content)
                     <span class="navigation-position"><input type="text" class="text" name="@Html.NameOf(m => m.MenuItemEntries[i].Position)" value="@menuPartEntry.Position" /></span>
                     <span class="navigation-actions">
                         <input type="hidden" name="@Html.NameOf(m => m.MenuItemEntries[i].MenuItemId)" value="@menuPartEntry.MenuItemId" />

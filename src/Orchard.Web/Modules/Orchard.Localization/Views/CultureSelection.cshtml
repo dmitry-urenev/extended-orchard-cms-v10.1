@@ -16,7 +16,9 @@
     </div>
     <input type="hidden" id="hfSelectedCulture" name="to" value="@Model.SelectedCulture" />
     <button type="submit" name="submit.ChangeLanguage" class="apply-bulk-actions-auto" value="submit.ChangeLanguage">@T("Change language")</button>
-</fieldset>@Html.Hidden("siteCulture", Model.SiteCulture, new { id = "siteCulture" })
+</fieldset>
+@Html.Hidden("siteCulture", Model.SiteCulture, new { id = "siteCulture" })
+<hr style="margin: 20px 0" />
 @using (Script.Foot())
 {
     <script type="text/javascript">

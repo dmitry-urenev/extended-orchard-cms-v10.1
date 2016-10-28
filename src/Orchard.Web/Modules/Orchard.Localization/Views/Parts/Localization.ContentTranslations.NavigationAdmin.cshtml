@@ -1,0 +1,31 @@
+﻿@using Orchard.Core.Contents;
+@using Orchard.ContentManagement;
+@using Orchard.Localization.Models;
+@using Orchard.Utility.Extensions;
+
+@if (AuthorizedFor(Permissions.PublishContent)) 
+{
+Style.Require("LocalizationAdmin");
+IEnumerable<LocalizationPart> localizations  = Model.Localizations;
+var localizationLinks = String.Join(", ", localizations.Select(c => Html.ItemEditLink(c.Culture.Culture, c)));
+var returnUrl = ViewContext.RequestContext.HttpContext.Request.ToUrlString();
+<span class="navigation-localization">
+    - @Model.Culture    
+    @if (Model.ContentItem.Id == Model.MasterId)
+    {
+       if (localizations.Count() > 0)
+       {
+            <span class="navigation-localizations">- @T("Other:") @Html.Raw(localizationLinks)</span>       
+       }
+       if (Model.AllowAddTranslations)
+       {
+            <br /><span class="add-localization">                 
+                    @Html.ActionLink(T("+ New translation").Text, "Translate", "Admin",
+                    new { area = "Orchard.Localization", id = Model.MasterId, to = Model.TargetCulture, returnUrl }, null)
+            </span>
+       }
+    } else {
+       @:- @T("Original:") @Html.ItemEditLink((IContent)(Model.ContentPart.MasterContentItem ?? Model.ContentItem))
+    }
+</span>
+}

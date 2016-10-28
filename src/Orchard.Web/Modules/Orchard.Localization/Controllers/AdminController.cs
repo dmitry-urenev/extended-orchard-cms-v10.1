@@ -1,22 +1,25 @@
-﻿using System;
-using System.Linq;
-using System.Web.Mvc;
+﻿using Orchard.Autoroute.Models;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Aspects;
+using Orchard.Core.Contents;
 using Orchard.Core.Contents.Settings;
+using Orchard.Core.Navigation.Models;
 using Orchard.DisplayManagement;
 using Orchard.Localization.Models;
 using Orchard.Localization.Services;
 using Orchard.Localization.ViewModels;
 using Orchard.Mvc;
-using Orchard.UI.Notify;
-using System.Collections.Generic;
-using Orchard.Autoroute.Models;
 using Orchard.Mvc.Extensions;
 using Orchard.Mvc.Html;
+using Orchard.UI.Notify;
 using Orchard.Utility.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
-namespace Orchard.Localization.Controllers {
+namespace Orchard.Localization.Controllers
+{
     [ValidateInput(false)]
     public class AdminController : Controller, IUpdateModel {
         private readonly IContentManager _contentManager;
@@ -241,6 +244,10 @@ namespace Orchard.Localization.Controllers {
                     contentItemTranslation.As<ICommonPart>().Container = parentLocalization.ContentItem;
                 }
             }
+            if (contentItemTranslation.Has<MenuPart>())
+            {
+                contentItemTranslation.As<MenuPart>().MenuPosition = contentItem.As<MenuPart>().MenuPosition;
+            }
 
             if (!ModelState.IsValid)
             {
@@ -275,6 +282,42 @@ namespace Orchard.Localization.Controllers {
                 returnUrl = Url.ItemEditUrl(contentItemTranslation);
             }
             return this.RedirectLocal(returnUrl);
+        }
+
+        [HttpPost]
+        public ActionResult RemoveWithTranslations(int id, string returnUrl)
+        {
+            var contentItem = _contentManager.Get(id, VersionOptions.Latest);
+
+            if (!Services.Authorizer.Authorize(Permissions.DeleteContent, contentItem, T("Couldn't remove content")))
+                return new HttpUnauthorizedResult();
+
+            if (contentItem != null)
+            {
+                var translations = _localizationService.GetLocalizations(contentItem, VersionOptions.Latest);
+                List<string> cultures = new List<string>();
+                if (contentItem.Has<ILocalizableAspect>())
+                    cultures.Add(contentItem.As<ILocalizableAspect>().Culture);
+
+                _contentManager.Remove(contentItem);
+
+                foreach (var t in translations)
+                {
+                    cultures.Add(t.As<ILocalizableAspect>().Culture);
+                    _contentManager.Remove(t.ContentItem);
+                }
+
+                cultures = cultures.Where(c => !string.IsNullOrEmpty(c)).ToList();
+
+                string msg = (string.IsNullOrWhiteSpace(contentItem.TypeDefinition.DisplayName)
+                    ? T("That content has been removed.")
+                    : T("That {0} has been removed.", contentItem.TypeDefinition.DisplayName))
+                    + (cultures.Any() ? (" Removed translations: " + string.Join(", ", cultures)) : "");
+
+                Services.Notifier.Information(T(msg));
+            }
+
+            return this.RedirectLocal(returnUrl, "~/Admin");
         }
 
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {

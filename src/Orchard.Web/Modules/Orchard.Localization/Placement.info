@@ -7,17 +7,32 @@
     -->
     <!-- edit shape just gets default placement -->
     <Place Parts_Localization_ContentTranslations_Edit="Content:0"/>
+  
     <Match DisplayType="Detail">
-        <Place Parts_Localization_ContentTranslations="Content:2"/>
+        <Place Parts_Localization_ContentTranslations="-"/>
     </Match>
+  
     <Match DisplayType="Summary">
-        <Place Parts_Localization_ContentTranslations_Summary="Content:2"/>
+        <Place Parts_Localization_ContentTranslations_Summary="-"/>
     </Match>
+  
     <Match DisplayType="SummaryAdmin">
         <Place Parts_Localization_ContentTranslations_SummaryAdmin="Content:5"/>
+        <Place Parts_Localization_DeleteWithTranslations_SummaryAdmin="Actions:100"/>
     </Match>
+    
+    <Match ContentType="Widget">
+      <Match DisplayType="SummaryAdmin">
+        <Place Parts_Localization_DeleteWithTranslations_SummaryAdmin="Actions:10@Widgets"/>
+        <Place Parts_Localization_ContentTranslations_SummaryAdmin="Content:5@Widgets"/>
+      </Match>
+    </Match>
+  
     <Match ContentType="MenuItem" DisplayType="NavigationAdmin">
       <Place Parts_Localization_ContentTranslations_NavigationAdmin="Content:0"/>
     </Match>
-    <Place CultureSelection="Content:0"/>
+  
+    <Place Parts_Localization_CultureSwitcher="Content:1"/>
+    <Place Parts_Localization_CultureSwitcher_Edit="Content:1"/>
+  
 </Placement>

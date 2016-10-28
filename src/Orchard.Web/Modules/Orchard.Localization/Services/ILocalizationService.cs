@@ -10,5 +10,8 @@ namespace Orchard.Localization.Services {
         void SetContentCulture(IContent content, string culture);
         IEnumerable<LocalizationPart> GetLocalizations(IContent content);
         IEnumerable<LocalizationPart> GetLocalizations(IContent content, VersionOptions versionOptions);
+
+        string GetLocalizedPath(string url, string culture);
+        string GetLocalizedPath(IContent content, string culture);
     }
 }

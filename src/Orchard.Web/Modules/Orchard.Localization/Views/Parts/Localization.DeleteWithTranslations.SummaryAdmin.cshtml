@@ -1,0 +1,10 @@
+﻿@using Orchard.ContentManagement;
+@using Orchard.Localization.Models;
+@{
+    var item = (Model.ContentItem as IContent);
+}
+
+@if (item.Has<LocalizationPart>() && item.As<LocalizationPart>().MasterContentItem == null)
+{
+    @Html.ActionLink("Delete with translations", "RemoveWithTranslations", "Admin", new { id = Model.ContentItem.Id, area = "Orchard.Localization", returnUrl = Request.RawUrl }, new { itemprop = "DeleteWT UnsafeUrl" }) @:|
+}
