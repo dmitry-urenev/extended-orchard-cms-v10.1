@@ -9,8 +9,17 @@ namespace Orchard.Core.Contents.ViewModels {
 
         public string Id { get; set; }
 
-        public string TypeName {
-            get { return Id; }
+        private string _typeName = null;
+        public string TypeName
+        {
+            get
+            {
+                return _typeName ?? Id;
+            }
+            set
+            {
+                _typeName = value;
+            }
         }
 
         public string TypeDisplayName { get; set; }

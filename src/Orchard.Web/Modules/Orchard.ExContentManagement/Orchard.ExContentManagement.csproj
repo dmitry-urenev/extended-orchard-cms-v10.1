@@ -94,6 +94,7 @@
     <Content Include="Scripts\local-bootstrap.min.js" />
     <Content Include="Scripts\jquery.mjs.nestedSortable.js" />
     <Content Include="Scripts\navigation-admin.js" />
+    <Content Include="Styles\menu.excontentmanagement-admin.css" />
     <Content Include="Styles\admin-ui.css" />
     <Content Include="Styles\local-bootstrap-theme.css" />
     <Content Include="Styles\local-bootstrap-theme.min.css" />
