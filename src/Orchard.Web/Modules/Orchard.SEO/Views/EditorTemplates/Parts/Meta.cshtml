@@ -1,0 +1,41 @@
+﻿@model Orchard.SEO.Models.MetaPart
+
+<fieldset></fieldset>
+<fieldset>
+    <legend>SEO Meta Data</legend>
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Title)
+    </div>
+    <div class="editor-field">
+        @Html.TextBoxFor(model => model.Title, new { @class = "large text" })
+        @Html.ValidationMessageFor(model => model.Title)
+    </div>
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Description)
+    </div>
+    <div class="editor-field">
+        @Html.TextAreaFor(model => model.Description)
+        @Html.ValidationMessageFor(model => model.Description)
+    </div>
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Keywords)
+    </div>
+    <div class="editor-field">
+        @Html.TextBoxFor(model => model.Keywords, new { @class = "large text" })
+        @Html.ValidationMessageFor(model => model.Keywords)
+    </div>
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Robots)
+    </div>
+    <div class="editor-field">
+        @Html.DropDownListFor(model => model.Robots,
+            new List<SelectListItem> {
+                new SelectListItem() { Text = "Default: INDEX, FOLLOW", Value = "INDEX, FOLLOW" },
+                new SelectListItem() { Text = "NOINDEX, FOLLOW", Value = "NOINDEX, FOLLOW" },
+                new SelectListItem() { Text = "INDEX, NOFOLLOW", Value = "INDEX, NOFOLLOW" },
+                new SelectListItem() { Text = "NOINDEX, NOFOLLOW", Value = "NOINDEX, NOFOLLOW" }}
+            )
+        @Html.ValidationMessageFor(model => model.Robots)
+    </div>
+</fieldset>
+<fieldset></fieldset>

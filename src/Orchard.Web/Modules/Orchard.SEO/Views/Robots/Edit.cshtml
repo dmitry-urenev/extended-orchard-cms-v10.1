@@ -1,0 +1,16 @@
+﻿@model Orchard.SEO.ViewModels.TextFileViewModel
+@{
+    Layout.Title = T("Manage Robots.txt File");
+}
+@Html.ValidationSummary()
+@using (Html.BeginFormAntiForgeryPost()) {
+	<fieldset>
+		<div>
+			<label for="@Html.FieldIdFor(m => m.Text)">@T("File Content")</label>
+			@Html.TextAreaFor(m => m.Text, new { @class = "textMedium", rows = "25" })
+			@Html.ValidationMessage("Text", "*")
+			<span class="hint">@T("The default text provided will allow all accessible content in the site to be indexed")</span>
+		</div>
+	</fieldset>
+	<button class="primaryAction" type="submit">@T("Save")</button>
+}

@@ -1,0 +1,18 @@
+Name: Orchard.SEO
+AntiForgery: enabled
+Version: 1.0
+OrchardVersion: 1.10.1
+Description: Meta keyword and description for content items
+Features:
+    Orchard.SEO:
+		Name: Meta info
+        Description: Meta tags: title, description, keywords, robots
+		Category: SEO
+	Orchard.Robots:
+        Name: Robots.txt
+		Description: Provides a way to define and modify the robots.txt file at the site root through configuration
+		Category: SEO
+	Orchard.Sitemap:
+        Name: Sitemap.xml
+		Description: Provides a way to define and modify the Sitemap.xml file
+		Category: SEO
