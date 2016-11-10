@@ -144,8 +144,8 @@ namespace Orchard.Autoroute.Drivers {
                     viewModel.Alias = viewModel.Alias.TrimStart('/');
                 }
 
-                part.LocalAlias = GetLastSegment(viewModel.Alias);  
-                part.DisplayAlias = viewModel.Alias;
+                part.LocalAlias = viewModel.LocalAlias;
+                part.DisplayAlias = ((viewModel.Alias ?? "").TrimEnd('/') + "/" + viewModel.LocalAlias).TrimStart('/');                                                           
 
                 // Reset the alias if we need to force regeneration, and the user didn't provide a custom one.
                 if (settings.AutomaticAdjustmentOnEdit && previous == part.DisplayAlias) {

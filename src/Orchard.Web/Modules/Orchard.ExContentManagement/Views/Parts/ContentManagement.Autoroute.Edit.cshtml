@@ -6,6 +6,8 @@
 @using Orchard.ExContentManagement.Aliases;
 @using Orchard.Autoroute.Models;
 @using Orchard.Localization.Models;
+@using Orchard.Mvc.Extensions;
+@using Orchard.Mvc.Html;
 @{
     var viewModel = Model.Model as Orchard.Autoroute.ViewModels.AutoroutePartEditViewModel;
     var contentItem = Model.ContentItem as ContentItem;
@@ -40,17 +42,27 @@
     <label>@T("Permalink")</label>
     @if (viewModel.Settings.AllowCustomPattern)
     {
-        <span>@ViewContext.RequestContext.HttpContext.Request.ToApplicationRootUrlString()/@urlPrefix</span>
+        <span>@Url.GetAbsoluteUrl("/")@urlPrefix</span>
         <span id="urlPartsPreview">@(!string.IsNullOrEmpty(parentUrl) ? (parentUrl + "/") : "")</span>            
         @*<span><input type="text" class="text" id="autoroteSlug" value="@slug" /></span>*@                
-        <span>@Html.TextBox(prefx + ".Alias", viewModel.Alias, new { @class = "text" })</span>
-        <input type="hidden" name="@(prefx + ".Url")" value="@(!string.IsNullOrEmpty(parentUrl) ? parentUrl : "")" id="urlParts" />
+        <span>@Html.TextBox(prefx + ".LocalAlias", viewModel.LocalAlias, new { @class = "text" })</span>
+        <input type="hidden" name="@(prefx + ".Alias")" value="@(!string.IsNullOrEmpty(parentUrl) ? parentUrl : "")" id="urlParts" />
     }
     else
     {
         <span>@ViewContext.RequestContext.HttpContext.Request.ToApplicationRootUrlString()/@urlPrefix</span>            
     }        
     <span class="hint">@T("Save the current item and leave the input empty to have it automatically generated using the pattern {0} e.g., {1}.", pattern.ElementAtOrDefault(Convert.ToInt32(defaultPattern.PatternIndex)).Name, pattern.ElementAtOrDefault(Convert.ToInt32(defaultPattern.PatternIndex)).Description)</span>
+    @if (!String.IsNullOrEmpty(viewModel.Alias))
+    {
+        <span>
+            @Html.Link(
+                T("View").Text,
+                Url.GetAbsoluteUrl("/") + urlPrefix + viewModel.Alias.TrimStart('/'),
+                new { target = "_blank" })
+        </span>
+    }
+
 </fieldset>
 
 @if (!viewModel.IsHomePage)

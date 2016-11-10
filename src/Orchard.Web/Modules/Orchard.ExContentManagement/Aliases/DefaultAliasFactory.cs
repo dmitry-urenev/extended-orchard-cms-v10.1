@@ -6,6 +6,7 @@ using Orchard.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace Orchard.ExContentManagement.Aliases
@@ -38,9 +39,9 @@ namespace Orchard.ExContentManagement.Aliases
 
             // Convert the pattern and route values via tokens
             var path = _tokenizer.Replace(pattern, context, new ReplaceOptions { Encoding = ReplaceOptions.NoEncode });
-            // removing trailing slashes in case the container is empty, and tokens are base on it (e.g. home page)
-            path = (path ?? "").Trim('/');
-
+            Regex rgx = new Regex("/{2,}");
+            path = rgx.Replace((path ?? ""), "/").Trim('/').ToLower();
+            
             var segments = _tokenizer.Evaluate(tokens, context);
 
             var result = new AliasBuildResult()

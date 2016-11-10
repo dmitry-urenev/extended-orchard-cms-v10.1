@@ -65,5 +65,36 @@ namespace Orchard.Mvc.Extensions {
             
             return baseUrl + "/" + url;
         }
+
+        public static string GetAbsoluteUrl(this UrlHelper urlHelper, string url)
+        {
+            if (url != null && url.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                return url;
+            }
+
+            string baseUrl = urlHelper.RequestContext.HttpContext.Request.ToApplicationRootUrlString();
+            if (String.IsNullOrEmpty(url))
+            {
+                return baseUrl;
+            }
+
+            // ~/foo/bar => /foo/bar
+            if (url.StartsWith("~/", StringComparison.OrdinalIgnoreCase))
+            {
+                url = url.Substring(1);
+            }
+
+            // orchardlocal/foo/bar => /orchardlocal/foo/bar
+            if (!url.StartsWith("/"))
+            {
+                url = "/" + url;
+            }
+
+            baseUrl = baseUrl.TrimEnd('/');
+            url = url.TrimStart('/');
+
+            return baseUrl + "/" + url;
+        }
     }
 }
