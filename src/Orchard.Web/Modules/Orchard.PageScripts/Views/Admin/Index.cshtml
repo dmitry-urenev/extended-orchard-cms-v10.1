@@ -1,0 +1,24 @@
+@model Orchard.PageScripts.Models.PageScriptsInfo
+@{
+    Layout.Title = T("Page Scripts").ToString();
+}
+
+@using(Html.BeginFormAntiForgeryPost()) {    
+    <fieldset>
+        @Html.LabelFor(m => m.TopHeaderScript, T("<head> Top header script... "))
+        @Html.TextAreaFor(m => m.TopHeaderScript)
+    </fieldset>
+    <fieldset>
+        @Html.LabelFor(m => m.BottomHeaderScript, T("... bottom header script </head>"))
+        @Html.TextAreaFor(m => m.BottomHeaderScript)
+    </fieldset>
+    <fieldset>
+        @Html.LabelFor(m => m.TopBodyScript, T("<body> Top body script..."))
+        @Html.TextAreaFor(m => m.TopBodyScript)
+    </fieldset>
+    <fieldset>
+        @Html.LabelFor(m => m.BottomBodyScript, T("... bottom body script </body>"))
+        @Html.TextAreaFor(m => m.BottomBodyScript)
+    </fieldset>
+    <button type="submit">Save</button>
+}

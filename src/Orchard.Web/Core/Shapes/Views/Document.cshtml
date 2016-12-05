@@ -15,13 +15,16 @@
 <head> 
     <meta charset="utf-8" />
     <title>@Html.Title(title, siteName)</title> 
+    @Display(Model.BeforeHead)
     @Display(Model.Head)
     <script>(function(d){d.className="dyn"+d.className.substring(6,d.className.length);})(document.documentElement);</script> 
     <script>window.isRTL = @(isRtl.ToString().ToLowerInvariant());</script>
 </head> 
 <body>
+@Display(Model.BeforeBody)
 @* Layout (template) is in the Body zone @ the default position (nothing, zero, zilch) *@
 @Display(Model.Body)
 @Display(Model.Tail)
+@Display(Model.AfterTail)
 </body>
 </html>
