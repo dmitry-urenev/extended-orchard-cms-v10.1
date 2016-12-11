@@ -24,5 +24,14 @@ namespace Orchard.Core.Title {
                 .WithDescription("Provides a Title for your content item."));
             return 2;
         }
+
+        public int UpdateFrom2()
+        {
+            SchemaBuilder.AlterTable("TitlePartRecord",
+                table => table
+                .AddColumn<bool>("RenderTitle", column => column.WithDefault(true))
+                );
+            return 3;
+        }
     }
 }

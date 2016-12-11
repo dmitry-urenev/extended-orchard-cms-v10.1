@@ -1,0 +1,37 @@
+﻿@using System.Web.Mvc.Html
+@model Orchard.SocialLinks.Models.SocialSharePart
+
+<fieldset>
+    <legend>Social share settings</legend>
+
+    <div>
+        <span class="checkbox-and-label">
+            @Html.CheckBoxFor(model => model.EnableTwitter)
+            @Html.LabelFor(m => m.EnableTwitter, T("Twitter").Text, new { @class = "forcheckbox" })
+        </span>
+    </div>
+    <div>
+        <span class="checkbox-and-label">
+            @Html.CheckBoxFor(model => model.EnableFacebook)
+            @Html.LabelFor(m => m.EnableFacebook, T("Facebook").Text, new { @class = "forcheckbox" })
+        </span>
+    </div>
+    <div>
+        <span class="checkbox-and-label">
+            @Html.CheckBoxFor(model => model.EnableGoogle)
+            @Html.LabelFor(m => m.EnableGoogle, T("Google+").Text, new { @class = "forcheckbox" })
+        </span>
+    </div>
+    <div>
+        <span class="checkbox-and-label">
+            @Html.CheckBoxFor(model => model.EnableLinkedIn)
+            @Html.LabelFor(m => m.EnableLinkedIn, T("LinkedIn").Text, new { @class = "forcheckbox" })
+        </span>
+    </div>
+    <div>
+        <span class="checkbox-and-label">
+            @Html.CheckBoxFor(model => model.EnableXing)
+            @Html.LabelFor(m => m.EnableXing, T("Xing").Text, new { @class = "forcheckbox" })
+        </span>
+    </div>
+</fieldset>

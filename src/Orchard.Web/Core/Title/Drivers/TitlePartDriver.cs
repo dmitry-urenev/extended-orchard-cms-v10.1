@@ -16,6 +16,11 @@ namespace Orchard.Core.Title.Drivers {
         }
 
         protected override DriverResult Display(TitlePart part, string displayType, dynamic shapeHelper) {
+            if (displayType == "Detail" && !part.RenderTitle)
+            {
+                return null;
+            }
+
             return Combined(
                 ContentShape("Parts_Title",
                     () => shapeHelper.Parts_Title(Title: part.Title)),
@@ -44,6 +49,11 @@ namespace Orchard.Core.Title.Drivers {
                 return;
             }
 
+            var render = context.Attribute(part.PartDefinition.Name, "RenderTitle");
+            bool renderTitle = true;
+            if (render != null && bool.TryParse(render, out renderTitle))
+                part.RenderTitle = renderTitle;
+
             context.ImportAttribute(part.PartDefinition.Name, "Title", title =>
                 part.Title = title
             );
@@ -51,6 +61,7 @@ namespace Orchard.Core.Title.Drivers {
 
         protected override void Exporting(TitlePart part, ExportContentContext context) {
             context.Element(part.PartDefinition.Name).SetAttributeValue("Title", part.Title);
+            context.Element(part.PartDefinition.Name).SetAttributeValue("RenderTitle", part.RenderTitle);
         }
     }
 }

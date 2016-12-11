@@ -33,7 +33,8 @@ namespace Orchard.ContentPicker.Drivers {
                                 () => {
                                     var model = new ContentMenuItemEditViewModel {
                                         ContentItemId = part.Content == null ? -1 : part.Content.Id,
-                                        Part = part
+                                        Part = part,
+                                        TargetBlank = part.TargetBlank
                                     };
                                     return shapeHelper.EditorTemplate(TemplateName: "Parts.ContentMenuItem.Edit", Model: model, Prefix: Prefix);
                                 });
@@ -54,6 +55,7 @@ namespace Orchard.ContentPicker.Drivers {
                 else {
                     part.Content = contentItem;
                 }
+                part.TargetBlank = model.TargetBlank;
             }
 
             return Editor(part, shapeHelper);

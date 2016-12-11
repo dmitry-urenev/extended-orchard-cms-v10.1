@@ -83,8 +83,11 @@ namespace Orchard.Widgets.Filters {
                     continue;
                 }
 
-                var widgetShape = _orchardServices.ContentManager.BuildDisplay(widgetPart);
-                zones[widgetPart.Zone].Add(widgetShape, widgetPart.Position);
+                var widgetShape = _orchardServices.ContentManager.BuildDisplay(widgetPart);                              
+                if (!widgetPart.PreventDisplay)
+                {
+                    zones[widgetPart.Zone].Add(widgetShape, widgetPart.Position);
+                }
             }
         }
 

@@ -153,6 +153,9 @@
     <Compile Include="Containers\ViewModels\ContainerTypePartSettingsViewModel.cs" />
     <Compile Include="Containers\ViewModels\ContainerWidgetViewModel.cs" />
     <Compile Include="Contents\ControlWrapper.cs" />
+    <Compile Include="Contents\PageContext\PageContext.cs" />
+    <Compile Include="Contents\PageContext\PageContextStateProvider.cs" />
+    <Compile Include="Contents\PageContext\WorkContextExtention.cs" />
     <Compile Include="Contents\Security\AuthorizationEventHandler.cs" />
     <Compile Include="Common\Services\BbcodeFilter.cs" />
     <Compile Include="Common\Services\ICommonService.cs" />

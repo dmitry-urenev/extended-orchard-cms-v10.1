@@ -1,0 +1,11 @@
+﻿Name: Orchard.PageScripts
+AntiForgery: enabled
+Author: Sustainable Systems UG
+Website: http://sustems.eu
+Version: 1.0
+OrchardVersion: 1.10.1
+Category: Content
+Description: Allows to add any scripts at top/bottom of the head/body element.
+Features:
+    Orchard.PageScripts:
+        Description: Allows to add any scripts at top/bottom of the head/body element.

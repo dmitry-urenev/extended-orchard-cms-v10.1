@@ -1,0 +1,43 @@
+﻿.hidden {
+    display: none;
+}
+
+.mode {    
+}
+.mode label {
+    display: inline-block;
+    margin-right: 15px;
+}
+.route {
+    margin-bottom: 5px;
+}
+.route label {
+    display: inline-block;
+    min-width: 112px;
+}
+
+.route input.area {
+    width: 250px;
+}
+
+.settings h3 {
+    margin: 5px 0; 
+}
+.route input,
+.params input {
+    padding: 3px;
+    border: solid 1px #bdbcbc;
+    margin: 2px 5px;
+}
+.params input.name {
+    margin: 2px 5px 2px 0;
+    width: 100px;
+    border: dashed 1px #EAE9D9;
+}
+.params input.name:active,
+.params input.name:focus {
+    border: solid 1px #bdbcbc;
+}
+.params input.value {
+   
+}

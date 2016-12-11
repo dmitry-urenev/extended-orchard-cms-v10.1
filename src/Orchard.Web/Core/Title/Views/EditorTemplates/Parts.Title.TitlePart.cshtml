@@ -1,7 +1,14 @@
 ﻿@model Orchard.Core.Title.Models.TitlePart
 
 <fieldset>
-    <label for="@Html.FieldIdFor(m => m.Title)" class="required">@T("Title")</label>    
+    @Html.LabelFor(m => m.Title, T("Title"))
     @Html.TextBoxFor(m => m.Title, new { @class = "text large", autofocus = "autofocus" })
     <span class="hint">@T("You must provide a title for this content item")</span>
+</fieldset>
+<fieldset>
+    <span class="checkbox-and-label">
+        @Html.CheckBoxFor(m => m.RenderTitle)
+        @Html.LabelFor(m => m.Title, T("Render Title").Text, new { @class = "forcheckbox" })
+    </span>
+    <span class="hint">@T("Does not render a title on the page")</span>
 </fieldset>

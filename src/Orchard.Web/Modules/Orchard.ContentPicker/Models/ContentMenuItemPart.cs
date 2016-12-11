@@ -19,5 +19,11 @@ namespace Orchard.ContentPicker.Models {
             get { return this.Retrieve(x => x.ContentItemId); }
             set { this.Store(x => x.ContentItemId, value); }
         }
+
+        public bool TargetBlank
+        {
+            get { return this.Retrieve(x => x.TargetBlank); }
+            set { this.Store(x => x.TargetBlank, value); }
+        }
     }
 }

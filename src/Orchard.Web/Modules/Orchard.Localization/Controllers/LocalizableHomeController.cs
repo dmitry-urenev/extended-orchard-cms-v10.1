@@ -8,6 +8,8 @@ using Orchard.Mvc.Extensions;
 using Orchard.Themes;
 using System.Web;
 using System.Web.Mvc;
+                                    
+using Orchard.Core.Contents.PageContext;
 
 namespace Orchard.CultureSwitcher.Controllers
 {
@@ -60,6 +62,9 @@ namespace Orchard.CultureSwitcher.Controllers
                     }
                 }
             }
+
+            var pcontext = _orchardServices.WorkContext.GetPageContext();
+            pcontext.ContentItem = homePage.ContentItem;
 
             dynamic model = _orchardServices.ContentManager.BuildDisplay(homePage);
             return new ShapeResult(this, model);

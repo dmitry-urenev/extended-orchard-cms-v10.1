@@ -1,0 +1,6 @@
+﻿<Placement>
+    <Place Parts_FollowMePart="Content:10"/>
+    <Place Parts_FollowMePart_Edit="Content:7.5"/>
+    <Place Parts_SocialSharePart="Content:10"/>
+    <Place Parts_SocialSharePart_Edit="Content:7.5"/>
+</Placement>

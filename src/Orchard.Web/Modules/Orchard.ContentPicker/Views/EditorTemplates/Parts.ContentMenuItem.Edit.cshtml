@@ -12,6 +12,9 @@
     @Html.HiddenFor(m => m.ContentItemId)
     <span class="hint">@T("Select the Content Item to display in the menu.")</span>
 </fieldset>
+<fieldset>
+    <label for="@Html.FieldIdFor(m => m.TargetBlank)">@Html.CheckBoxFor(m => m.TargetBlank) @T("Open in new Tab")</label>
+</fieldset>
 
 @using(Script.Foot()) {
 <script type="text/javascript">

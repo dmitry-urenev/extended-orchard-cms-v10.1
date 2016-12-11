@@ -1,0 +1,13 @@
+﻿@using System.Web.UI.WebControls
+@using Orchard.SocialLinks.ViewModels
+
+@{
+    Style.Require("SocialLinks");
+}
+
+<ul class="socialLinks">
+@foreach (FollowMeLinkModel lnk in Model.Links)
+{
+    <li><a href="@lnk.Url" target="_blank" class="socialLink-@lnk.Name"><span>@lnk.Name</span></a></li> 
+}
+</ul>

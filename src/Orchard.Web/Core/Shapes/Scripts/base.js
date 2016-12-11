@@ -245,6 +245,10 @@
                 if (!confirm(dataMessage)) {
                     return false;
                 }
+            } else if (_this.filter("[itemprop~='RemoveAllUrl']").length == 1) {
+                if (!confirm(confirmRemoveAllMessage)) {
+                    return false;
+                }
             }
 
             form.submit();
