@@ -1,0 +1,11 @@
+Name: Social Links
+AntiForgery: enabled
+Author: Sustainable Systems UG
+Website: http://sustems.eu
+Version: 1.0
+OrchardVersion: 1.8.1
+Description: Easily link users to your social media accounts.
+Features:
+    Orchard.SocialLinks:
+        Description: Easily link users to your social media accounts.
+        Category: Social

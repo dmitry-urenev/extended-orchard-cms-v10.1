@@ -1,0 +1,11 @@
+﻿@{
+    Style.Require("SocialLinks");
+}
+<ul class="socialLinks">
+    @foreach (var shape in Model.Buttons)
+    {
+        <li>
+            @Display(shape)
+        </li>
+    }
+</ul>

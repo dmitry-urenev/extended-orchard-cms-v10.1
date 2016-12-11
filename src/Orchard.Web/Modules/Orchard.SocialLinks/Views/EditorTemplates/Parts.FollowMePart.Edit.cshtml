@@ -1,0 +1,61 @@
+﻿@using System.Web.Mvc.Html
+@model Orchard.SocialLinks.Models.FollowMePart
+
+<fieldset>
+  <legend>SocialLink Fields</legend>
+            
+  <div class="editor-label">
+    @Html.LabelFor(model => model.TwitterUrl)
+  </div>
+  <div class="editor-field">
+    @Html.TextBoxFor(model => model.TwitterUrl, new { @class = "text medium" })
+    @Html.ValidationMessageFor(model => model.TwitterUrl)
+  </div>
+
+  <div class="editor-label">
+    @Html.LabelFor(model => model.FacebookUrl)
+  </div>
+  <div class="editor-field">
+    @Html.TextBoxFor(model => model.FacebookUrl, new { @class = "text medium" })
+    @Html.ValidationMessageFor(model => model.FacebookUrl)
+  </div>
+
+  <div class="editor-label">
+    @Html.LabelFor(model => model.LinkedInUrl)
+  </div>
+  <div class="editor-field">
+    @Html.TextBoxFor(model => model.LinkedInUrl, new { @class = "text medium" })
+    @Html.ValidationMessageFor(model => model.LinkedInUrl)
+  </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.XingUrl)
+    </div>
+    <div class="editor-field">
+        @Html.TextBoxFor(model => model.XingUrl, new { @class = "text medium" })
+        @Html.ValidationMessageFor(model => model.XingUrl)
+    </div>
+  <div class="editor-label">
+    @Html.LabelFor(model => model.GoogleUrl)
+  </div>
+  <div class="editor-field">
+    @Html.TextBoxFor(model => model.GoogleUrl, new { @class = "text medium" })
+    @Html.ValidationMessageFor(model => model.GoogleUrl)
+  </div>
+  <div class="editor-label">
+    @Html.LabelFor(model => model.YouTubeUrl)
+  </div>
+  <div class="editor-field">
+    @Html.TextBoxFor(model => model.YouTubeUrl, new { @class = "text medium" })
+    @Html.ValidationMessageFor(model => model.YouTubeUrl)
+  </div>
+    <div class="editor-label">
+        @Html.LabelFor(model => model.GitHubUrl)
+    </div>
+    <div class="editor-field">
+        @Html.TextBoxFor(model => model.GitHubUrl, new { @class = "text medium" })
+        @Html.ValidationMessageFor(model => model.GitHubUrl)
+    </div>
+
+
+</fieldset>
