@@ -1,8 +1,10 @@
 ﻿@using Orchard.ContentManagement
 @{
     ContentItem contentItem = Model.Content.ContentItem.ContentMenuItemPart.Content;
+    bool targetBlank = Model.Content.ContentItem.ContentMenuItemPart.TargetBlank;
 }
 
-@if (contentItem != null) {
-    <a href="@Model.Href">@Model.Text</a> 
+@if (contentItem != null)
+{
+    <a href="@Model.Href" target="@(targetBlank ? "_blank" : "_self")">@Model.Text</a>
 }
