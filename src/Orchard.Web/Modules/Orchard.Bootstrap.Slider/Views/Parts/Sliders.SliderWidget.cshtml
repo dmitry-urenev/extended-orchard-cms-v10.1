@@ -1,0 +1,78 @@
+﻿@using Orchard.Mvc.Extensions
+@using Orchard.ContentManagement;
+@using Orchard.Bootstrap.Slider.Models;
+@using Orchard.MediaLibrary.Fields;
+
+@{
+    var slides = Model.Slides as IEnumerable<SliderItemPart>;
+    var contentItem = Model.ContentItem as ContentItem;
+    var part = contentItem.As<SliderWidgetPart>();
+
+    Script.Require("Bootstrap");
+
+    Style.Require("Bootstrap");
+    Style.Require("BootstrapTheme");
+
+    var animClass = "slide";
+    if (part.AnimationType == AnimationType.Fade)
+    {
+        animClass += " carousel-fade";
+        Style.Include("slider-fade.css");
+    }
+
+    var id = "carousel" + contentItem.Id;
+}
+
+<div id="@id" class="carousel @animClass">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        @for (var i = 0; i < slides.Count(); i++)
+        {
+            <li data-target="#@id" data-slide-to="@i" @(i == 0 ? "class=active" : "")></li>
+        }
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+        @for (var i = 0; i < slides.Count(); i++)
+        {
+            var s = slides.ElementAt(i);
+            var pictField = s.Get(typeof(MediaLibraryPickerField), "Picture") as MediaLibraryPickerField;
+            var mediaPart = pictField.MediaParts.FirstOrDefault();
+            <div class="item @(i == 0 ? "active" : "")">
+                <a href="@(string.IsNullOrEmpty(s.Url) ? "javascript:void(0);" : s.Url)">
+                    @if (mediaPart != null)
+                    {
+                        @Display(BuildDisplay(mediaPart, "Raw"))
+                    }
+                </a>
+                <div class="carousel-caption">
+                    <a href="@(string.IsNullOrEmpty(s.Url) ? "javascript:void(0);" : s.Url)">
+                        <h3>@s.Title</h3>
+                    </a>
+                    @Html.Raw(s.Caption)
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Controls -->
+    <a class="left carousel-control" href="#@id" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">@T("Previous")</span>
+    </a>
+    <a class="right carousel-control" href="#@id" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">@T("Next")</span>
+    </a>
+</div>
+@using (Script.Foot())
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#@id').carousel({
+                interval: @part.Interval
+                })
+        });
+    </script>
+}

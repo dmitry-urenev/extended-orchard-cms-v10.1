@@ -1,0 +1,19 @@
+﻿@using Orchard.Mvc.Extensions
+@model Orchard.Bootstrap.Slider.ViewModels.SliderWidgetViewModel
+
+<fieldset>
+    @Html.LabelFor(m => m.Sliders, T("Slider"))
+    @Html.DropDownListFor(m => m.Part.SliderId, new SelectList(Model.Sliders, "Id", "Name"))
+</fieldset>
+<fieldset>
+    @Html.LabelFor(m => m.Part.Interval, T("Interval"))
+    @Html.TextBoxFor(m => m.Part.Interval, new { @class = "text small" }) ms
+</fieldset>
+<fieldset>
+    @Html.LabelFor(m => m.Part.Count, T("Items count"))
+    @Html.TextBoxFor(m => m.Part.Count, new { @class = "text small" })
+</fieldset>
+<fieldset>
+    @Html.LabelFor(m => m.Part.AnimationType, T("Animation"))
+    @Html.EnumDropDownListFor(m => m.Part.AnimationType)
+</fieldset>

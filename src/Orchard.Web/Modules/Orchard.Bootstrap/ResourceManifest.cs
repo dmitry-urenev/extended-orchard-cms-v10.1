@@ -12,14 +12,14 @@ namespace Orchard.Bootstrap
 
             //v3.3.4 
 
-            manifest.DefineScript("Bootstrap").SetUrl("v3.3.4/bootstrap.min.js", "v3.3.4/bootstrap.js").SetVersion("3.3.4")
-                .SetCdn("//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js")
+            manifest.DefineScript("Bootstrap-v3.3.4").SetUrl("bootstrap-v3.3.4.min.js", "bootstrap-v3.3.4.js").SetVersion("3.3.4")
+                .SetCdn("//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap-v3.3.4.min.js")
                 .SetDependencies("jQuery");
 
-            manifest.DefineStyle("Bootstrap").SetUrl("v3.3.4/bootstrap.min.css", "v3.3.4/bootstrap.css").SetVersion("3.3.4")
-                .SetCdn("//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css");
+            manifest.DefineStyle("Bootstrap-v3.3.4").SetUrl("bootstrap-v3.3.4.min.css", "bootstrap-v3.3.4.css").SetVersion("3.3.4")
+                .SetCdn("//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-v3.3.4.min.css");
 
-            manifest.DefineStyle("BootstrapTheme").SetUrl("v3.3.4/bootstrap-theme.min.css", "v3.3.4/bootstrap-theme.css").SetVersion("3.3.4")
+            manifest.DefineStyle("BootstrapTheme-v3.3.4").SetUrl("bootstrap-theme-v3.3.4.min.css", "bootstrap-theme-v3.3.4.css").SetVersion("3.3.4")
                 .SetCdn("//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css");
         }
     }

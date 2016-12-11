@@ -1,0 +1,9 @@
+﻿@using Orchard.Bootstrap.Slider.Models;
+@{
+    Style.Require("SliderAdmin");
+}
+@if (AuthorizedFor(Orchard.Core.Contents.Permissions.EditContent)) {
+<div class="item-properties actions">
+    <p><a href="@Url.Action("Edit", new { sliderId = ((SliderPart)Model.ContentPart).Id })" class="edit">@T("Slider Properties")</a></p>
+</div>
+}

@@ -1,0 +1,11 @@
+﻿@using Orchard.Mvc.Extensions
+@model Orchard.Bootstrap.Slider.Models.SliderItemPart
+
+<fieldset>
+    @Html.LabelFor(m => m.Url, T("Navigate Url"))
+    @Html.TextBoxFor(m => m.Url, new { @class = "text large" })
+</fieldset>
+<fieldset>
+    @Html.LabelFor(m => m.Order, T("Order"))
+    @Html.TextBoxFor(m => m.Order, new { @class = "text small" })
+</fieldset>
