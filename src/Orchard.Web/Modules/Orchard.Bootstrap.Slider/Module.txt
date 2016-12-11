@@ -1,0 +1,13 @@
+﻿Name: Slider
+AntiForgery: enabled
+Author: Sustainable Systems UG
+Website: http://sustems.eu
+Version: 1.8.1
+OrchardVersion: 1.8
+Description: Bootstrap Slider
+Features:
+	Orchard.Bootstrap.Slider:
+		Name: Bootstrap Slider with HTML-Caption
+		Category: Widget
+        Description: Allows to create multiple Sliders with HTML-Caption.
+		Dependencies: Orchard.jQuery, Orchard.Bootstrap, Orchard.MediaLibrary

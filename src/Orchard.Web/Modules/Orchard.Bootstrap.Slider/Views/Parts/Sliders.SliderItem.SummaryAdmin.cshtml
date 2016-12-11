@@ -1,0 +1,26 @@
+﻿@using Orchard.Bootstrap.Slider.Models;
+@using Orchard.ContentManagement;
+@using Orchard.Utility.Extensions;
+@using Orchard.MediaLibrary.Fields;
+@{
+    ContentItem contentItem = Model.ContentItem;
+    SliderItemPart item = (SliderItemPart)contentItem.Get(typeof(SliderItemPart));
+
+    var pictField = item.Get(typeof(MediaLibraryPickerField), "Picture") as MediaLibraryPickerField;
+    string name = pictField.DisplayName;
+    var mediaParts = pictField.MediaParts;
+}
+<p>Order: @item.Order</p>
+<p class="media-library-picker-field media-library-picker-field-@name.HtmlClassify()">
+    @if (mediaParts.Any())
+    {
+        foreach (var p in mediaParts)
+        {
+            @Display(BuildDisplay(p, "Thumbnail"))
+        }
+    }
+    else
+    {
+        <span class="no-media">@T("No media items.")</span>
+    }
+</p>

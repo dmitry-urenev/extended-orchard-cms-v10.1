@@ -1,0 +1,39 @@
+﻿<Placement>
+  
+  <Place Parts_Sliders_SliderItem_Fields="Content:2"/>
+  <Place Parts_Sliders_SliderWidget_Fields="Content:2"/>
+  <Place Parts_Sliders_SliderWidget="Content:1"/>
+
+  <Match ContentType="Slider">
+    <Match DisplayType="Detail">
+      <!-- blog posts currently added to the blog within the controller into Content:5 <Place Parts_Sliders_SliderItem_List="Content:5" /> but...
+                 ...placing it in in the Content zone as it's currently implemented to light up the RSS feed for the blog... -->
+      <!-- Parts_Sliders_RemotePublishing is made available with the "Remote Slider Publishing" feature -->
+      <Place Parts_Sliders_SliderItem_List="Content" />
+    </Match>
+    <Match DisplayType="DetailAdmin">
+      <Place Parts_Sliders_SliderItem_List_Admin="Content:5"
+             Parts_Sliders_Slider_Manage="Actions" />
+    </Match>
+    <!--<Match DisplayType="Summary">
+      <Place Parts_Sliders_Slider_Description="Content:before"
+             Parts_Sliders_Slider_SliderItemCount="Meta:3"/>
+    </Match>-->
+    <Match DisplayType="SummaryAdmin">
+      <Place Parts_Contents_Clone_SummaryAdmin="-" />
+      <Place Parts_Contents_Publish_SummaryAdmin="-" />
+      <Place Parts_Sliders_Slider_SummaryAdmin="Actions:10"/>
+    </Match>
+  </Match>
+  <Match ContentType="SliderItem">
+    <Match DisplayType="SummaryAdmin">
+      <Place Parts_Sliders_SliderItem_SummaryAdmin="Meta:before"></Place>
+      
+      <Place Fields_MediaLibraryPicker_SummaryAdmin="-" />
+      <Place Parts_Contents_Clone_SummaryAdmin="-" />
+    </Match>
+    <Place Fields_MediaLibraryPicker_Edit-Picture="Content:0"/>
+    <Place Parts_Common_Date_Edit="-" />
+  </Match>
+  
+</Placement>

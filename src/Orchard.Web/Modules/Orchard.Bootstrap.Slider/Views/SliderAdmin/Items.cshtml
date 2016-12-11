@@ -1,0 +1,144 @@
+@using Orchard.Core.Contents.ViewModels;
+@using Orchard.Utility.Extensions;
+@{
+    var slider = Model.Slider as Orchard.Bootstrap.Slider.Models.SliderPart;
+
+    Layout.Title = T("Manage Slider > ").ToString() + slider.Name;
+    Script.Require("jQuery");
+
+    Style.Include("slider-admin.css");
+}
+<style type="text/css">
+    .lang-selector {
+        float: right;
+    }
+</style>
+@if (Model.ContentItems.Items.Count > 0)
+{
+
+    @*<div class="actions"><a class="add button primaryAction"
+         href="@Url.Action("Create", "SliderItemAdmin", new { sliderId = slider.Id, area = "Orchard.Bootstrap.Slider" })">@T("New Item")</a></div>*@
+
+        <div id="display-menu-controls">
+            <div class="menu-block">
+                @using (Html.BeginFormAntiForgeryPost(Url.Action("List", "Admin", new { area = "Contents", id = "" })))
+                {
+                    <fieldset class="bulk-actions">
+                        <label for="publishActions">@T("Actions:")</label>
+                        <select id="publishActions" name="Options.BulkAction">
+                            @Html.SelectOption(ContentsBulkAction.None, ContentsBulkAction.None, T("Choose action...").ToString())
+                            @Html.SelectOption(ContentsBulkAction.None, ContentsBulkAction.PublishNow, T("Publish Now").ToString())
+                            @Html.SelectOption(ContentsBulkAction.None, ContentsBulkAction.Unpublish, T("Unpublish").ToString())
+                            @Html.SelectOption(ContentsBulkAction.None, ContentsBulkAction.Remove, T("Delete").ToString())
+                        </select>
+                        @Html.Hidden("returnUrl", ViewContext.RequestContext.HttpContext.Request.ToUrlString())
+                        <button type="submit" name="submit.BulkEdit" value="yes" onclick="getSelectedItems(this)">@T("Apply")</button>
+                    </fieldset>
+                }
+            </div>
+            <div class="menu-block">
+                @Html.Link(T("Add a new slide").Text, Url.Action("Create", "SliderItemAdmin", new { sliderId = slider.Id, lang = Model.CurrentCulture, area = "Orchard.Bootstrap.Slider", returnUrl = Request.RawUrl }))
+            </div>
+            @{ var cultures = Model.AvailableCultures as IEnumerable<string>; }
+            @if (cultures.Any())
+            {
+                <div class="lang-selector bulk-actions-auto">
+                    @using (Html.BeginForm("Items", "SliderAdmin", FormMethod.Get, new { area = "Orchard.Bootstrap.Slider", sliderId = slider.Id }))
+                    {
+                        <span>@T("Language:")</span>
+                        <select id="languageSelector" name="lang">
+                            @foreach (var lang in cultures)
+                            {
+                                @Html.SelectOption(lang, (string)Model.CurrentCulture == lang, lang)
+                            }
+                        </select>
+                        <button type="submit" class="apply-bulk-actions-auto">@T("Show")</button>
+                    }
+                </div>
+            }    
+        </div>
+        
+        <fieldset class="contentItems bulk-items">
+            @Display(Model.ContentItems)
+        </fieldset>
+        <div>
+            @Display(Model.Pager)
+        </div>
+}
+else
+{
+    <h3 class="message">@T("There are no items for this slider. Want to <a href=\"{0}\">add one</a>?", 
+        Url.Action("Create", "SliderItemAdmin", new { sliderId = slider.Id, area = "Orchard.Bootstrap.Slider" }))</h3>
+}
+@using (Script.Foot()) { 
+    <script type="text/javascript">
+        function getSelectedItems(submitElement) {
+
+            var form = $(submitElement).closest("form");
+
+            var selected = $("input[name=itemIds]", ".contentItems").map(function (i, el) { return el.value });
+            selected.each(function () {
+                $('<input />').attr('type', 'hidden')
+                    .attr('name', "itemIds")
+                    .attr('value', this)
+                    .appendTo('form');
+            });
+        }
+
+
+        $(document).ready(function () {
+
+            var items = $(".contentItems > ul > li");
+
+            var detectColumns = function (a) {
+                var columns = 0; var offsetTop = 0;
+                if (a.length > 0) {
+                    offsetTop = a[0].offsetTop;
+
+                    for (var idx = 0; idx < a.length; idx++) {
+                        var i = a[idx];
+                        if (i.offsetTop != offsetTop)
+                            break;
+                        columns++;
+                    }
+                }
+                return columns;
+            }
+
+            var iterator = function (a, n) {
+                var current = 0,
+                    l = a.length;
+                return function () {
+                    if (current == -1) // end was reached
+                        return [];
+
+                    end = current + n;
+                    var part = a.slice(current, end);
+                    current = end < l ? end : -1;
+                    return part;
+                };
+            };
+            var getMaxHeight = function (numArray) {
+                return Math.max.apply(null, numArray);
+            }
+
+            var slides = items.toArray();
+            var columnsCount = detectColumns(slides);
+
+            if (columnsCount > 1) {
+                var next = iterator(slides, columnsCount);
+                var tripple = next();
+                while (tripple.length > 0) {
+                    var elHeights = $.map(tripple, function (el, i) {
+                        return $(el).height();
+                    });
+                    var maxHeight = getMaxHeight(elHeights);
+                    $.each(tripple, function (i, el) {
+                        $(el).height(maxHeight);
+                    });
+                    tripple = next();
+                }
+            }
+        });
+    </script>
+}

@@ -1,0 +1,9 @@
+﻿@using Orchard.Bootstrap.Slider.Models;
+@using Orchard.ContentManagement;
+@using Orchard.Utility.Extensions;
+@{
+    ContentItem contentItem = Model.ContentItem;
+    SliderPart slider = (SliderPart)contentItem.Get(typeof(SliderPart));
+}
+<a href="@Url.Action("Items", new { sliderId = slider.Id })" title="@T("List Items")">@T("List Items")</a>@T(" | ")
+<a href="@Url.Action("Create", "SliderItemAdmin", new { sliderId = slider.Id, area = "Orchard.Bootstrap.Slider" })" title="@T("New Item")">@T("New Item")</a>@T(" | ")
