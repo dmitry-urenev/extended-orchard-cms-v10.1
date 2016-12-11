@@ -4,6 +4,7 @@ using Orchard.DisplayManagement;
 using Orchard.Localization;
 using Orchard.Mvc;
 using Orchard.Themes;
+using Orchard.Core.Contents.PageContext;
 
 namespace Orchard.Core.Contents.Controllers {
     [Themed]
@@ -42,7 +43,10 @@ namespace Orchard.Core.Contents.Controllers {
             if (!Services.Authorizer.Authorize(Permissions.ViewContent, contentItem, T("Cannot view content"))) {
                 return new HttpUnauthorizedResult();
             }
-            
+
+            var pcontext = Services.WorkContext.GetPageContext();
+            pcontext.ContentItem = contentItem;
+
             var model = _contentManager.BuildDisplay(contentItem);
             if (_hca.Current().Request.IsAjaxRequest()) {
                 return new ShapePartialResult(this,model);
@@ -69,6 +73,9 @@ namespace Orchard.Core.Contents.Controllers {
             if (!Services.Authorizer.Authorize(Permissions.PreviewContent, contentItem, T("Cannot preview content"))) {
                 return new HttpUnauthorizedResult();
             }
+
+            var pcontext = Services.WorkContext.GetPageContext();
+            pcontext.ContentItem = contentItem;
 
             var model = _contentManager.BuildDisplay(contentItem);
             if (_hca.Current().Request.IsAjaxRequest()) {
