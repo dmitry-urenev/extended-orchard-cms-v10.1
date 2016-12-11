@@ -86,5 +86,11 @@ namespace Orchard.Widgets.Models {
             get { return this.Retrieve(x => x.CssClasses); }
             set { this.Store(x => x.CssClasses, value); }
         }
+
+
+        /// <summary>
+        /// Allows to prevent widget from displaying in Zone
+        /// </summary>
+        public bool PreventDisplay { get; set; }
     }
 }

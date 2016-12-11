@@ -6,20 +6,25 @@ using Orchard.Logging;
 using Orchard.Widgets.Models;
 using Orchard.ContentManagement;
 using Orchard.ContentManagement.Utilities;
+using Orchard.Widgets.Filters;
+using System.Linq;
 
 namespace Orchard.Widgets.Services{
     public class DefaultLayerEvaluationService : ILayerEvaluationService {
         private readonly IConditionManager _conditionManager;
         private readonly IOrchardServices _orchardServices;
+        private readonly IEnumerable<ILayerFilter> _layerFilters;
 
         private readonly LazyField<int[]> _activeLayerIDs; 
 
-        public DefaultLayerEvaluationService(IConditionManager conditionManager, IOrchardServices orchardServices) {
+        public DefaultLayerEvaluationService(IConditionManager conditionManager, IOrchardServices orchardServices, IEnumerable<ILayerFilter> layerFilters) {
             _conditionManager = conditionManager;
             _orchardServices = orchardServices;
 
             Logger = NullLogger.Instance;
             T = NullLocalizer.Instance;
+
+            _layerFilters = layerFilters;
 
             _activeLayerIDs = new LazyField<int[]>();
             _activeLayerIDs.Loader(PopulateActiveLayers);
@@ -43,6 +48,14 @@ namespace Orchard.Widgets.Services{
             // Get Layers and filter by zone and rule
             // NOTE: .ForType("Layer") is faster than .Query<LayerPart, LayerPartRecord>()
             var activeLayers = _orchardServices.ContentManager.Query<LayerPart>().ForType("Layer").List();
+
+            // Apply custom  pre-filtering
+            if (_layerFilters != null && _layerFilters.Any())
+            {
+                activeLayers = activeLayers
+                        .Where(l => _layerFilters.All(f => f.ApplyFilter(l)))
+                        .ToList();
+            }
 
             var activeLayerIds = new List<int>();
             foreach (var activeLayer in activeLayers) {

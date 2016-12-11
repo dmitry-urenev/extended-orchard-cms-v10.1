@@ -98,6 +98,7 @@
     <Compile Include="ControlWrapper.cs" />
     <Compile Include="Drivers\LayerPartDriver.cs" />
     <Compile Include="Extensions\WidgetsMetaDataExtensions.cs" />
+    <Compile Include="Filters\ILayerFilter.cs" />
     <Compile Include="Handlers\DisplayedContentItemHandler.cs" />
     <Compile Include="Handlers\LayerHintHandler.cs" />
     <Compile Include="Drivers\WidgetPartDriver.cs" />
