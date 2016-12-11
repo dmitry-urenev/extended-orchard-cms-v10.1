@@ -1,0 +1,81 @@
+﻿@model Orchard.StaticPages.ViewModels.StaticPagePartEditViewModel
+@using Orchard.Mvc.Extensions
+@using Orchard.Utility.Extensions;
+@using Orchard.Environment.Configuration
+@{   
+    var urlPrefix = WorkContext.Resolve<ShellSettings>().RequestUrlPrefix;
+    if (!String.IsNullOrWhiteSpace(urlPrefix))
+    {
+        urlPrefix += "/";
+    }
+    Style.Include("static-pages.admin.css");
+}
+
+<fieldset class="permalink">
+    <div class="mode">
+        <label>@Html.RadioButtonFor(m => m.IsAction, "false", !Model.IsAction) @T("Static Redirect")</label>
+        <label>@Html.RadioButtonFor(m => m.IsAction, "true", Model.IsAction) @T("Controller Action")</label>
+    </div>
+    <div class="settings">
+        <h3>@T("Settings")</h3>
+        <div id="staticRedirect" class="@(Model.IsAction ? "hidden" : "")">
+            <label>@T("Static Page Url:")</label>
+            <span>@Url.MakeAbsolute("/")@urlPrefix</span>
+            <span>@Html.TextBoxFor(m => m.StaticPath, new { @class = "text" })</span>
+            <span class="hint">@T("Link to the custom static page file or controller's action. Request will be transfered to that url.")</span>
+        </div>
+        <div id="controllerAction" class="@(Model.IsAction ? "" : "hidden")">          
+            <ul class="route">
+                <li>
+                    <label>@T("Area")</label>:@Html.TextBoxFor(m => m.Area, new { @class = "area" })
+                </li>
+                <li>
+                    <label>@T("Controller")</label>:@Html.TextBoxFor(m => m.Controller)
+                </li>
+                <li>
+                    <label>@T("Action")</label>:@Html.TextBoxFor(m => m.Action)
+                </li>
+            </ul>          
+            <ul class="params">
+                @for (var i = 0; i < Model.RouteValues.Count; i++)
+                {
+                    var rv = Model.RouteValues[i];
+                    <li>@Html.TextBox("RouteValues[" + i + "].Name", rv.Name, new { @class = "name" }):@Html.TextBox("RouteValues[" + i + "].Value", rv.Value, new { @class = "value" })<a href="javascript:void(0);" onclick="removeParameter(this)">Remove</a>
+                    </li>
+                }
+            </ul>
+            <a href="javascript:void(0);" onclick="addParameter()">@T("+ Add parameter")</a>
+        </div>
+    </div>
+</fieldset>
+
+@using (Script.Foot())
+{
+    <script type="text/javascript">
+        function addParameter() {
+            var idx = $("ul.params li").length;
+            var prefix = "StaticPagePart";
+            $("<li></li>")
+                .append("<input type='text' name='" + prefix + ".RouteValues[" + idx + "].Name' class='name' />")
+                .append(":")
+                .append("<input type='text' name='" + prefix + ".RouteValues[" + idx + "].Value' class='value' />")
+                .append("<a href='javascript:void(0);' onclick='removeParameter(this)'>Remove</a>")
+                .appendTo("ul.params");
+        }
+        function removeParameter(el) {
+            $(el).parent().remove();
+        }
+
+        function reindexParameters() {
+        }
+
+        //<![CDATA[
+        $(document).ready(function () {
+            $(".mode input").click(function () {
+                $("#staticRedirect").toggleClass("hidden");
+                $("#controllerAction").toggleClass("hidden");
+            })
+        });
+        //]]>
+    </script>
+}

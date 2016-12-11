@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Orchard.StaticPages.ViewModels.StaticRouteViewModel>
+@{
+    Layout.Title = T("Static routes");
+}
+<table class="items">
+    <thead>
+        <tr>
+            <th scope="col">@T("ID")</th>
+            <th scope="col">@T("Path")</th>
+            <th scope="col">@T("Route Values")</th>
+            <th scope="col">&nbsp;</th>
+        </tr>
+    </thead>
+    @foreach(var i in Model) 
+    {
+        <tr>
+            <td>
+                @i.ID
+            </td>
+            <td>
+                @i.Path
+            </td>
+            <td>
+                @i.RouteValues
+            </td>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+    }
+</table>
+
