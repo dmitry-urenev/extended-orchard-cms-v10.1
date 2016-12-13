@@ -245,7 +245,7 @@
                 if (!confirm(dataMessage)) {
                     return false;
                 }
-            } else if (_this.filter("[itemprop~='RemoveAllUrl']").length == 1) {
+            } else if (_this.filter("[itemprop~='RemoveWT']").length == 1) {
                 if (!confirm(confirmRemoveAllMessage)) {
                     return false;
                 }

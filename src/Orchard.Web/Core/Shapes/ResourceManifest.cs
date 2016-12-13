@@ -4,7 +4,7 @@ namespace Orchard.Core.Shapes {
     public class ResourceManifest : IResourceManifestProvider {
         public void BuildManifests(ResourceManifestBuilder builder) {
             var manifest = builder.Add();
-            manifest.DefineScript("ShapesBase").SetUrl("base.js?v=1.0").SetDependencies("jQuery");
+            manifest.DefineScript("ShapesBase").SetUrl("base.js?v=1.1").SetDependencies("jQuery");
             manifest.DefineStyle("Shapes").SetUrl("site.css");
             manifest.DefineStyle("ShapesSpecial").SetUrl("special.css");
 
