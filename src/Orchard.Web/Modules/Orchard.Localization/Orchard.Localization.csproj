@@ -105,6 +105,7 @@
     <Compile Include="Models\CultureSwitcherPartRecord.cs" />
     <Compile Include="Filters\NavigationFilter.cs" />
     <Compile Include="Routes.cs" />
+    <Compile Include="Selectors\ContentCultureSelector-Old.cs" />
     <Compile Include="ViewModels\AddLocalizationViewModel.cs" />
     <Compile Include="Models\TransliterationSpecificationRecord.cs" />
     <Compile Include="Providers\ContentLocalizationTokens.cs" />

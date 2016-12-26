@@ -52,7 +52,7 @@ namespace Orchard.Localization.Services
                 return _contentManager
                     .Query<LocalizationPart>(versionOptions, content.ContentItem.ContentType)
                     .Where<LocalizationPartRecord>(l =>
-                        (l.MasterContentItemId == localized.Record.MasterContentItemId || // AF -> DE: the same MasterContentItemId
+                        (l.MasterContentItemId == localized.Record.MasterContentItemId && l.MasterContentItemId != 0 || // AF -> DE: the same MasterContentItemId
                          l.MasterContentItemId == content.ContentItem.Id ||  // US -> DE: current content is master
                          l.Id == localized.Record.MasterContentItemId // AF -> US
                          ) 

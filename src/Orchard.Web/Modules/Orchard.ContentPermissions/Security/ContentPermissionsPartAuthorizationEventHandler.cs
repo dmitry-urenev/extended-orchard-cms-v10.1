@@ -9,7 +9,8 @@ using Orchard.ContentPermissions.Models;
 using Orchard.Security.Permissions;
 
 namespace Orchard.ContentPermissions.Security {
-    public class ContentPermissionsPartAuthorizationEventHandler : IAuthorizationServiceEventHandler {
+    public class ContentPermissionsPartAuthorizationEventHandler : IAuthorizationServiceEventHandler
+    {
         private readonly IWorkContextAccessor _workContextAccessor;
         private static readonly string[] AnonymousRole = new[] { "Anonymous" };
         private static readonly string[] AuthenticatedRole = new[] { "Authenticated" };
@@ -22,6 +23,9 @@ namespace Orchard.ContentPermissions.Security {
         public void Adjust(CheckAccessContext context) { }
 
         public void Complete(CheckAccessContext context) {
+
+            if (!context.Granted && context.Adjusted)
+                return;
 
             if (context.User != null) {
                 var superuser = _workContextAccessor.GetContext().CurrentSite.SuperUser;

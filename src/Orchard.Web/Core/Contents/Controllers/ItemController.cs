@@ -36,6 +36,8 @@ namespace Orchard.Core.Contents.Controllers {
                 return Preview(id, version);
 
             var contentItem = _contentManager.Get(id.Value, VersionOptions.Published);
+            var pcontext = Services.WorkContext.GetPageContext();
+            pcontext.ContentItem = contentItem;
 
             if (contentItem == null)
                 return HttpNotFound();
@@ -43,9 +45,6 @@ namespace Orchard.Core.Contents.Controllers {
             if (!Services.Authorizer.Authorize(Permissions.ViewContent, contentItem, T("Cannot view content"))) {
                 return new HttpUnauthorizedResult();
             }
-
-            var pcontext = Services.WorkContext.GetPageContext();
-            pcontext.ContentItem = contentItem;
 
             var model = _contentManager.BuildDisplay(contentItem);
             if (_hca.Current().Request.IsAjaxRequest()) {
@@ -66,16 +65,16 @@ namespace Orchard.Core.Contents.Controllers {
             if (version != null)
                 versionOptions = VersionOptions.Number((int)version);
 
-            var contentItem = _contentManager.Get(id.Value, versionOptions);
+            var contentItem = _contentManager.Get(id.Value, versionOptions);           
+            var pcontext = Services.WorkContext.GetPageContext();
+            pcontext.ContentItem = contentItem;
+
             if (contentItem == null)
                 return HttpNotFound();
 
             if (!Services.Authorizer.Authorize(Permissions.PreviewContent, contentItem, T("Cannot preview content"))) {
                 return new HttpUnauthorizedResult();
             }
-
-            var pcontext = Services.WorkContext.GetPageContext();
-            pcontext.ContentItem = contentItem;
 
             var model = _contentManager.BuildDisplay(contentItem);
             if (_hca.Current().Request.IsAjaxRequest()) {
