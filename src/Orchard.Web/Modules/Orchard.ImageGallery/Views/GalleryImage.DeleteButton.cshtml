@@ -1,0 +1,6 @@
+﻿<fieldset class="delete-button">
+    @{ 
+        var actionUrl = Url.Action("DeleteImage", "Admin", new { area = "Orchard.ImageGallery", id = Model.ContentItem.Id });
+    }
+    <a class="button" itemprop="RemoveUrl UnsafeUrl" href="@actionUrl">@T("Delete")</a>
+</fieldset>

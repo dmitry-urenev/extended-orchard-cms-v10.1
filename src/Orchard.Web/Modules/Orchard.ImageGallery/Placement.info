@@ -1,0 +1,8 @@
+﻿<Placement>
+    <Place Parts_GalleryPart_Fields="Content:2"/>
+    <Place Gallery_DeleteButton="Sidebar:25" />
+    <Place GalleryImage_DeleteButton="Sidebar:25" />
+  
+    <Place Parts_ImageGallery="Content:after"/>
+    <Place Parts_ImageGallery_Edit="Content:2.5"/>
+</Placement>

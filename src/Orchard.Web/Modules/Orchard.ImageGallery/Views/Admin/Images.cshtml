@@ -1,0 +1,133 @@
+﻿@model Orchard.ImageGallery.ViewModels.GalleryViewModel
+@using Orchard.ImageGallery.Extensions
+
+@{
+    Style.Require("ImageGalleryAdmin");
+    Script.Require("jQueryUI_Sortable");
+
+    Layout.Title = T("Manage Image Gallery").ToString();
+
+    string noThumbPic = Url.Content("~/Modules/Orchard.ImageGallery/Content/Images/no-image-box.png");
+
+    var gallery = Model.Part;
+}
+
+<div class="clearBoth"></div>
+
+@using (Html.BeginFormAntiForgeryPost())
+{
+    <div class="manage">
+        @Html.ActionLink(T("Edit Properties").ToString(), "EditProperties", new { galleryId = gallery.Id, returnUrl = Request.RawUrl }, new { @class = "button" })
+        @if (Model.Images.Any())
+        {
+            <button name="submit.DeleteSelectedImages" value="delete" type="submit" onclick="deleteSelected(event)">@T("Delete selected")</button>
+        }
+        @Html.ActionLink(T("Add images").ToString(), "AddImages", new { galleryId = gallery.Id }, new { @class = "button primaryAction" })
+    </div>
+    <h2>@Html.ActionLink("Galleries", "List") &gt; @gallery.Title</h2>
+    <br />
+    <input type="hidden" id="galleryId" name="galleryId" value="@gallery.Id" />
+
+    if (Model.Images.Any())
+    {
+    <ul id="images" class="items">
+        @foreach (var imageModel in Model.Images)
+        {
+            var image = imageModel.Part;
+            var file = imageModel.File;
+
+            <li class="image @(image.IsCover.GetValueOrDefault() ? "cover" : "")" data-key="@image.Id">
+                <label class="selector">@T("Select")<input type="checkbox" name="ids" value="@image.Id" onchange="onSelectedChanged(this)" /></label>
+                <h3 title="@image.Title">
+                    <img class="grip" src='@Href("~/Modules/Orchard.ImageGallery/Content/Images/grip.png")' alt="grip" />
+                    @Html.ActionLink(image.Title, "Edit", new { area = "Contents", controller="Admin", id = image.Id, returnUrl = Request.RawUrl })
+                </h3>
+                <div>
+                    <div class="thumb">
+                        <a href="@Url.Action("Edit", "Admin", new { area = "Contents", id = image.Id, returnUrl = Request.RawUrl })">
+                            @if (!string.IsNullOrEmpty(image.PublicUrl))
+                            {
+                                <img src="@Display.ResizeMediaUrl(Width: 250, Height: 200, Mode: "crop", Alignment: "middlecenter", Path: image.PublicUrl)" />
+                            }
+                            else
+                            {
+                                <img src="@noThumbPic" />
+                            }
+                        </a>
+                    </div>
+                    <i title="@image.Caption">@(!string.IsNullOrEmpty(image.Caption) ? image.Caption : T("No description").Text)</i>
+                </div>
+                <footer>
+                    @if (file != null)
+                    {
+                        if (image.ModifiedUtc.HasValue)
+                        {
+                            @image.ModifiedUtc.Value.ToString("g")
+                        }
+                        @:| @file.Size.ToFriendlySizeString()
+                    }
+                    else
+                    {
+                        <b>@T("File not found")</b>
+                    }
+                </footer>
+            </li>
+        }
+    </ul>
+    } else
+    {
+        <div class="no-records">
+            @T("There are no images in that gallery yet.")&nbsp;@Html.ActionLink(T("Click here to add images").ToString(), "AddImages", new { galleryId = gallery.Id })
+        </div>
+    }
+}
+
+@using (Script.Foot())
+{
+    <script type="text/javascript">
+        function deleteSelected(e) {
+            if ($(".image input[name=ids]:checked").length == 0) {
+                alert("@T("Please select images to delete")");
+                e.preventDefault();
+                return false;
+            }
+
+            if (!confirm("@T("Do you really want to delete selected images?")")) {
+                e.preventDefault();
+                return false;
+            }
+        }
+
+        function onSelectedChanged(chb) {
+            if ($(chb).is(":checked")) {
+                $(chb).closest(".image").addClass("selected");
+            } else {
+                $(chb).closest(".image").removeClass("selected");
+            }
+        }
+
+        function UpdateOrder(event, ui) {
+            var images = new Array();
+
+            $("#images .image").each(function () {
+                images.push($(this).attr("data-key"));
+            });
+
+            var ajaxData = ({
+                __RequestVerificationToken: $('[name=__RequestVerificationToken]').attr('value'),
+                images: images, galleryId: $('#galleryId').val()
+            });
+
+            $.ajax({
+                type: 'POST',
+                data: ajaxData,
+                url: 'ReorderImages',
+                traditional: true
+            });
+        }
+
+        $(document).ready(function () {
+            $('#images').sortable({ update: UpdateOrder }).disableSelection();
+        });
+    </script>
+}

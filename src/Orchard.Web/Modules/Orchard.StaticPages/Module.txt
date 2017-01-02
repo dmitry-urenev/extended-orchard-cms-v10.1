@@ -9,6 +9,3 @@ Features:
     Orchard.StaticPages:
 		Category: Core
         Description: Description for feature Orchard.StaticPages.
-	Orchard.StaticPages.ContentParts:
-		Category: Core
-		Description: Renders content parts after StaticPage main body

@@ -16,5 +16,8 @@ namespace Orchard.Core.Title.Models {
             get { return Retrieve(x => x.RenderTitle); }
             set { Store(x => x.RenderTitle, value); }
         }
+
+        // TODO: implement this as setting 
+        public bool EnableRenderTitleSetting { get; set; }
     }
 }
