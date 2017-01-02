@@ -9,6 +9,8 @@ using Orchard.ContentManagement;
 using Orchard.Security;
 using Orchard.Tags.Models;
 using Orchard.UI.Notify;
+using Orchard.Localization.Services;
+using Orchard.Localization.Models;
 
 namespace Orchard.Tags.Services {
     public class TagService : ITagService {
@@ -18,19 +20,27 @@ namespace Orchard.Tags.Services {
         private readonly IAuthorizationService _authorizationService;
         private readonly IOrchardServices _orchardServices;
         private readonly ISessionFactoryHolder _sessionFactoryHolder;
+        private readonly ICultureManager _cultureManager;
+
+
 
         public TagService(IRepository<TagRecord> tagRepository,
                           IRepository<ContentTagRecord> contentTagRepository,
                           INotifier notifier,
                           IAuthorizationService authorizationService,
                           IOrchardServices orchardServices,
-                          ISessionFactoryHolder sessionFactoryHolder) {
+                          ISessionFactoryHolder sessionFactoryHolder,
+                          ICultureManager cultureManager)
+        {
             _tagRepository = tagRepository;
             _contentTagRepository = contentTagRepository;
             _notifier = notifier;
             _authorizationService = authorizationService;
             _orchardServices = orchardServices;
             _sessionFactoryHolder = sessionFactoryHolder;
+
+            _cultureManager = cultureManager;
+
             Logger = NullLogger.Instance;
             T = NullLocalizer.Instance;
         }
@@ -132,11 +142,24 @@ namespace Orchard.Tags.Services {
             return GetTaggedContentItems(tagId, skip, take, VersionOptions.Published);
         }
 
-        public IEnumerable<IContent> GetTaggedContentItems(int tagId, int skip, int take, VersionOptions options) {
-            return _orchardServices.ContentManager
-                .Query<TagsPart, TagsPartRecord>()
-                .Where(tpr => tpr.Tags.Any(tr => tr.TagRecord.Id == tagId))
-                .Join<CommonPartRecord>().OrderByDescending(x => x.CreatedUtc)
+        public IEnumerable<IContent> GetTaggedContentItems(int tagId, int skip, int take, VersionOptions options)
+        {
+            var ctx = _orchardServices.WorkContext.HttpContext;
+            var isMultiCulturalSite = _cultureManager.ListCultures().Any();
+
+            IContentQuery<ContentItem> query = _orchardServices.ContentManager.Query();
+            query = query.Where<TagsPartRecord>(tpr => tpr.Tags.Any(tr => tr.TagRecord.Id == tagId));
+
+            if (isMultiCulturalSite)
+            {
+                string cultureName = _cultureManager.GetCurrentCulture(ctx);
+                var culture = _cultureManager.GetCultureByName(cultureName);
+
+                query = query.Where<LocalizationPartRecord>(x => x.CultureId == culture.Id);
+            }
+
+            return query.Join<CommonPartRecord>()
+                .OrderByDescending(x => x.CreatedUtc)
                 .Slice(skip, take);
         }
 
@@ -144,11 +167,23 @@ namespace Orchard.Tags.Services {
             return GetTaggedContentItemCount(tagId, VersionOptions.Published);
         }
 
-        public int GetTaggedContentItemCount(int tagId, VersionOptions options) {
-            return _orchardServices.ContentManager
-                .Query<TagsPart, TagsPartRecord>()
-                .Where(tpr => tpr.Tags.Any(tr => tr.TagRecord.Id == tagId))
-                .Count();
+        public int GetTaggedContentItemCount(int tagId, VersionOptions options)
+        {
+            var ctx = _orchardServices.WorkContext.HttpContext;
+            var isMultiCulturalSite = _cultureManager.ListCultures().Any();
+
+            IContentQuery<ContentItem> query = _orchardServices.ContentManager.Query();
+            query = query.Where<TagsPartRecord>(tpr => tpr.Tags.Any(tr => tr.TagRecord.Id == tagId));
+
+            if (isMultiCulturalSite)
+            {
+                string cultureName = _cultureManager.GetCurrentCulture(ctx);
+                var culture = _cultureManager.GetCultureByName(cultureName);
+
+                query = query.Where<LocalizationPartRecord>(x => x.CultureId == culture.Id);
+            }
+
+            return query.Count();
         }
 
         private void TagContentItem(TagsPartRecord tagsPartRecord, string tagName) {

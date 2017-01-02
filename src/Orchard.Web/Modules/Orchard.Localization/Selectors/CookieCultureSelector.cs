@@ -6,6 +6,7 @@ using Orchard.Localization.Providers;
 using Orchard.Localization.Services;
 using Orchard.Mvc;
 using Orchard.Services;
+using Orchard.Caching;
 
 namespace Orchard.Localization.Selectors
 {
@@ -14,18 +15,21 @@ namespace Orchard.Localization.Selectors
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IClock _clock;
         private readonly ShellSettings _shellSettings;
+        private readonly ISignals _signals;
 
         internal const string FrontEndCookieName = "OrchardCurrentCulture-FrontEnd";
         internal const string AdminCookieName = "OrchardCurrentCulture-Admin";
         private const int DefaultExpireTimeYear = 1;
 
         public CookieCultureSelector(IHttpContextAccessor httpContextAccessor,
-            IClock clock,
+            IClock clock, 
+            ISignals signals,
             ShellSettings shellSettings)
         {
             _httpContextAccessor = httpContextAccessor;
             _clock = clock;
             _shellSettings = shellSettings;
+            _signals = signals;
         }
 
         public void SetCulture(string culture)
@@ -51,6 +55,8 @@ namespace Orchard.Localization.Selectors
             httpContext.Request.Cookies.Remove(cookieName);
             httpContext.Response.Cookies.Remove(cookieName);
             httpContext.Response.Cookies.Add(cookie);
+
+            _signals.Trigger(Localization.Signals.CurrentCultureChanged);
         }
 
         public CultureSelectorResult GetCulture(HttpContextBase context)

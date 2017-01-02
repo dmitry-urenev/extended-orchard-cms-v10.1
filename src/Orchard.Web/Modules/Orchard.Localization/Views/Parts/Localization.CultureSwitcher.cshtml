@@ -4,10 +4,11 @@
 
 @{
     var availableCultures = Model.AvailableCultures as List<string>;
+    var currentCulture = this.WorkContext.CurrentCulture;
 
     if (Model.DisplayMode == 0)
     {
-        Model.DisplayMode = (int) DisplayModes.DropdownList;
+        Model.DisplayMode = (int)DisplayModes.DropdownList;
     }
 
     var availableCultureswithNames = new List<KeyValuePair<string, string>>(availableCultures.Count);
@@ -45,7 +46,7 @@
     }
 }
 
-@using (Html.BeginForm("ChangeCulture", "UserCulture", new { Area = "Orchard.Localization" }, FormMethod.Post))
+@using (Html.BeginForm("ChangeCulture", "UserCulture", new { Area = "Orchard.Localization", returnUrl = Request.RawUrl }, FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 
@@ -63,7 +64,11 @@
             <ul>
                 @foreach (var culture in availableCultureswithNames)
                 {
-                    <li><a data-culture="@culture.Key">@culture.Value</a></li>
+                    var current = string.Equals(currentCulture, culture.Key, StringComparison.OrdinalIgnoreCase)
+                        ? "current"
+                        : null;
+
+                    <li class="@current"><a data-culture="@culture.Key">@culture.Value</a></li>
                 }
             </ul>
         </div>

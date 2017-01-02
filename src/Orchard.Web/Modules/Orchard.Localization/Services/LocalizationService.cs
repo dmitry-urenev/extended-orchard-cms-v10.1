@@ -120,7 +120,7 @@ namespace Orchard.Localization.Services
             var routeInfo = _pathResolutionService.ResolveUrl(url);
 
             if (routeInfo == null || !routeInfo.Content.Parts.Any(p => p.Is<ILocalizableAspect>()))
-                return localizedPath;
+                return url;
 
             var localizationPart = GetLocalizedContentItem(routeInfo.Content, culture, VersionOptions.Published);
             if (localizationPart != null && localizationPart.ContentItem.Has<AutoroutePart>())
