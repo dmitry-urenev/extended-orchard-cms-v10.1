@@ -1,0 +1,18 @@
+@model Orchard.ImageGallery.ViewModels.ImageAddViewModel
+@{ Script.Require("jQueryMultiFile").AtHead(); }
+           
+@{ Layout.Title = T("Add Images").ToString(); }
+
+@using (Html.BeginForm("AddImages", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" })) {
+    @Html.ValidationSummary()
+    <fieldset>
+        <label>@T("You can add multiple image files or zip files containing the images.")</label>
+        <input id="ImageFiles" name="ImageFiles" class="multi" type="file" value="@T("Browse")" size="64" accept="@string.Join("|", Model.AllowedFiles.ToArray())"/> 
+        @Html.HiddenFor(o => o.GalleryId)
+    </fieldset>
+    <fieldset>
+        <button class="primaryAction" type="submit">@T("Upload")</button>
+        @Html.ActionLink(T("Cancel"), "Images", new { galleryId = @Model.GalleryId }, new { @class = "button" }) 
+        @Html.AntiForgeryTokenOrchard()
+    </fieldset>
+}

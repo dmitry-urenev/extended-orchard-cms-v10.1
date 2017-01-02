@@ -1,0 +1,18 @@
+﻿@using Orchard.ImageGallery.Models
+@using Orchard.ContentManagement
+
+@{
+    GalleryPart part = (Model.ContentItem as ContentItem).As<GalleryPart>();
+    Layout.Title = T("Edit Gallery").ToString() + " - " + part.Title;
+}
+@using (Html.BeginFormAntiForgeryPost())
+{
+    @Html.ValidationSummary()
+    // Model is a Shape, calling Display() so that it is rendered using the most specific template for its Shape type
+    <div class="primary">
+        @Display(Model.Content)
+    </div>
+    <div class="secondary edit-item-sidebar">
+        @Display(Model.Sidebar)
+    </div>
+}

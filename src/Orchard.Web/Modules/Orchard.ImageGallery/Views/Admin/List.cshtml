@@ -1,0 +1,85 @@
+@model IEnumerable<Orchard.ImageGallery.Models.GalleryPart>
+@using Orchard.ImageGallery.Extensions
+
+@{
+    Style.Require("ImageGalleryAdmin");
+    Script.Require("jQueryUI_Sortable");
+    Layout.Title = T("Image Galleries").ToString();
+
+    string noThumbPic = Url.Content("~/Modules/Orchard.ImageGallery/Content/Images/no-image-box.png");
+}
+
+<div class="manage">@Html.ActionLink(T("Add new Image Gallery").ToString(), "Create", new { }, new { @class = "button primaryAction" })</div>
+<h2>
+    @T("Your Image Galleries")
+</h2>
+<br />
+@if (Model.Any())
+{
+<ul class="items">
+    @foreach (var gallery in Model)
+    {
+        <li class="gallery" data-key="@gallery.Id">
+            <h3 title="@gallery.Title">
+                <img class="grip" src='@Href("~/Modules/Orchard.ImageGallery/Content/Images/grip.png")' alt="grip" />
+                @Html.ActionLink(gallery.Title, "Images", new { galleryId = gallery.Id })
+            </h3>
+            <div class="thumb">
+                <a href="@Url.Action("Images", new { galleryId = gallery.Id })">
+                    @if (!string.IsNullOrEmpty(gallery.AlbumCoverUrl))
+                    {
+                        <img src="@Display.ResizeMediaUrl(Width: 250, Height: 200, Mode: "crop", Alignment: "middlecenter", Path: gallery.AlbumCoverUrl)" />
+                    }
+                    else
+                    {
+                        <img src="@noThumbPic" />
+                    }
+                </a>
+            </div>
+            <footer>
+                @if (gallery.ModifiedUtc.HasValue)
+                {
+                    @gallery.ModifiedUtc.Value.ToString("g")
+                } 
+                | @gallery.ImagesCount @T("Pictures")
+            </footer>
+        </li>
+    }
+</ul>
+@Html.AntiForgeryToken()
+}
+else
+{
+    <div class="no-records">
+        @T("There are no galleries yet.")&nbsp;@Html.ActionLink(T("Click here to create a new one").ToString(), "Create")
+    </div>
+}
+
+@using (Script.Foot())
+{
+    <script type="text/javascript">
+        function UpdateOrder(event, ui) {
+            var galleries = new Array();
+
+            $(".items .gallery").each(function () {
+                galleries.push($(this).attr("data-key"));
+            });
+
+            var ajaxData = ({
+                __RequestVerificationToken: $('[name=__RequestVerificationToken]').attr('value'),
+                galleries: galleries
+            });
+
+            $.ajax({
+                type: 'POST',
+                data: ajaxData,
+                url: 'ReorderGalleries',
+                traditional: true
+            });
+        }
+
+        $(document).ready(function () {
+            $('.items').sortable({ update: UpdateOrder }).disableSelection();
+        });
+    </script>
+}

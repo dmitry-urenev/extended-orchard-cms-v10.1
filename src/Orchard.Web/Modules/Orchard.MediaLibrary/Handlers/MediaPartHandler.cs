@@ -15,6 +15,11 @@ namespace Orchard.MediaLibrary.Handlers {
 
             Filters.Add(StorageFilter.For(repository));
             OnRemoving<MediaPart>((context, part) => RemoveMedia(part));
+
+            OnVersioned<MediaPart>((context, part, newPart) => {
+                newPart._publicUrl.Value = part._publicUrl.Value;
+            });
+
             OnLoaded<MediaPart>((context, part) => {
                 if (!String.IsNullOrEmpty(part.FileName)) {
                     part._publicUrl.Loader(() => _mediaLibraryService.GetMediaPublicUrl(part.FolderPath, part.FileName));

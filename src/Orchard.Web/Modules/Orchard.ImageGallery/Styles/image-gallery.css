@@ -1,0 +1,22 @@
+﻿/** This style will be present at every image gallery, regardless of the plugin used **/
+
+.image-gallery {
+	background-color: #fff;
+	padding: 10px;	
+}
+.image-gallery ul {
+    list-style: none;
+    text-align: center;
+}
+.image-gallery ul li { 
+    display: inline; 
+}
+.image-gallery ul img {
+	border: 3px #fff solid;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+.image-gallery ul a:hover img {
+	border-color: #cfe493;
+}
+.image-gallery ul a:hover { color: #fff; }

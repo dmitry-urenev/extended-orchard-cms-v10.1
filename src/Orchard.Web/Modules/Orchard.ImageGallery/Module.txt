@@ -1,0 +1,13 @@
+Name: ImageGallery
+AntiForgery: enabled
+Author: Gabriel Eduardo Chites de Orchard, Dmitry Urenev
+Version: 1.5.0
+OrchardVersion: 1.10.1
+Description: The Image Gallery module provides means to upload images and organize them into galleries. These image galleries are used on Orchard to present images in a beautiful way, leveraging the existing Orchard JQuery feature.
+
+Features:
+    Orchard.ImageGallery:
+		Name: Image Gallery
+        Description: Image gallery
+		Dependencies: Orchard.MediaLibrary
+		Category: Media

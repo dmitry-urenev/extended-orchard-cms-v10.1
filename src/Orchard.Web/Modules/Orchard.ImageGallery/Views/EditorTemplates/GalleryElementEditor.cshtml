@@ -1,0 +1,19 @@
+﻿@model Orchard.ImageGallery.ViewModels.GalleryElementEditorViewModel
+@using Orchard.ImageGallery.Extensions
+           
+@{ Script.Include("Editor/ImageGallery.js"); }
+
+<fieldset>
+    <legend>@T("Image Gallery Viewer Element")</legend>
+    
+    @if (!Model.HasAvailableGalleries) {
+        <div>@T("You need first to create an image gallery on Image Galleries menu")</div>
+    }
+    else {
+        <div id="imageGalleryProperties">
+            <div>@Html.LabelFor(o => o.SelectedGallery, @T("Choose image gallery to display"))</div>
+            <div>@Html.DropDownListFor(o => o.SelectedGallery, 
+                    Model.AvailableGalleries.Select(g => new SelectListItem() { Text = g.Title, Value = g.Id.ToString() }))</div>
+        </div>
+    }
+</fieldset>

@@ -285,6 +285,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M33.Layout", "Orchard.Web\Modules\M33.Layout\M33.Layout.csproj", "{B852C71A-826A-4C68-873D-F9E34141F9FF}"
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orchard.PageScripts", "Orchard.Web\Modules\Orchard.PageScripts\Orchard.PageScripts.csproj", "{7B144576-6E95-42AD-9686-1C171182C40E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orchard.ImageGallery", "Orchard.Web\Modules\Orchard.ImageGallery\Orchard.ImageGallery.csproj", "{EACC1A53-532B-486B-BC51-BA65ACBA2B61}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CodeCoverage|Any CPU = CodeCoverage|Any CPU

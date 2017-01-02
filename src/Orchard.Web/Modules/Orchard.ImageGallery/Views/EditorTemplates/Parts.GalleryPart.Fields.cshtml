@@ -1,0 +1,41 @@
+﻿@model Orchard.ImageGallery.Models.GalleryPart
+@using Orchard.Mvc.Extensions
+           
+<fieldset>
+    @Html.LabelFor(m => m.FolderName, T("Filder name"))
+    @if (Model.Id == 0)
+    {
+        @Html.TextBoxFor(m => m.FolderName, new { @class = "text medium" })
+    }
+    else
+    {
+        @Html.TextBoxFor(m => m.FolderName, new { @class = "text medium", disabled = "disabled" })
+    }
+</fieldset>
+
+<fieldset>
+    @Html.CheckBoxFor(m => m.IsEnabled)
+    @Html.LabelFor(m => m.IsEnabled, T("Is enabled").Text, new { @class = "forcheckbox" })
+    <span class="hint">@T("Enable to display this gallery.")</span>
+</fieldset>
+
+<fieldset>
+    @Html.LabelFor(m => m.ThumbnailWidth, T("Thumbnail width"))
+    @Html.TextBoxFor(m => m.ThumbnailWidth, new { @class = "text small" })
+</fieldset>
+
+<fieldset>
+    @Html.LabelFor(m => m.ThumbnailHeight, T("Thumbnail height"))
+    @Html.TextBoxFor(m => m.ThumbnailHeight, new { @class = "text small" })
+</fieldset>
+
+<fieldset>
+    @Html.CheckBoxFor(m => m.KeepAspectRatio)
+    @Html.LabelFor(m => m.KeepAspectRatio, T("Keep aspect ratio").Text, new { @class = "forcheckbox" })
+</fieldset>
+
+<fieldset>
+    @Html.LabelFor(m => m.Order, T("Order"))
+    @Html.TextBoxFor(m => m.Order, new { @class = "text small" })
+</fieldset>
+
