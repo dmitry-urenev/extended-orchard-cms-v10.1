@@ -282,8 +282,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orchard.Bootstrap", "Orchar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orchard.SEO", "Orchard.Web\Modules\Orchard.SEO\Orchard.SEO.csproj", "{F070D4DA-10ED-4165-A6A4-A0A5257B5CB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M33.Layout", "Orchard.Web\Modules\M33.Layout\M33.Layout.csproj", "{B852C71A-826A-4C68-873D-F9E34141F9FF}"
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orchard.PageScripts", "Orchard.Web\Modules\Orchard.PageScripts\Orchard.PageScripts.csproj", "{7B144576-6E95-42AD-9686-1C171182C40E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M33.Layout", "Orchard.Web\Modules\M33.Layout\M33.Layout.csproj", "{B852C71A-826A-4C68-873D-F9E34141F9FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orchard.StaticPages", "Orchard.Web\Modules\Orchard.StaticPages\Orchard.StaticPages.csproj", "{8D2A9640-0734-4E01-91B4-A5F702105660}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orchard.SocialLinks", "Orchard.Web\Modules\Orchard.SocialLinks\Orchard.SocialLinks.csproj", "{8526BB47-E80A-422A-8F85-7B2C8FC5B6CF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orchard.ImageGallery", "Orchard.Web\Modules\Orchard.ImageGallery\Orchard.ImageGallery.csproj", "{EACC1A53-532B-486B-BC51-BA65ACBA2B61}"
 EndProject
