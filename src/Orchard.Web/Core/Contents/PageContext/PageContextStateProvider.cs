@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Orchard.Caching;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -34,6 +35,13 @@ namespace Orchard.Core.Contents.PageContext
 
     public class DefaultPageContextHolder : IPageContextHolder
     {
+        private readonly ISignals _signals;
+
+        public DefaultPageContextHolder(ISignals signals)
+        {
+            _signals = signals;
+        }
+
         private PageContext _pageContext;
 
         public PageContext PageContext
@@ -42,10 +50,15 @@ namespace Orchard.Core.Contents.PageContext
             {
                 if (_pageContext == null)
                 {
-                    _pageContext = new PageContext();
+                    _pageContext = CreatePageContext();
                 }
                 return _pageContext;
             }
+        }
+
+        private PageContext CreatePageContext()
+        {
+            return new PageContext(_signals);
         }
     }
 }

@@ -83,7 +83,7 @@ namespace Orchard.Tests.Modules.Users.Controllers {
             builder.RegisterInstance(new Mock<IContentDisplay>().Object);
             builder.RegisterType<StubCacheManager>().As<ICacheManager>();
             builder.RegisterType<StubParallelCacheContext>().As<IParallelCacheContext>();
-            builder.RegisterType<Signals>().As<ISignals>();
+            builder.RegisterType<Orchard.Caching.Signals>().As<ISignals>();
 
             builder.RegisterType<DefaultEncryptionService>().As<IEncryptionService>();
             builder.RegisterInstance(ShellSettingsUtility.CreateEncryptionEnabled());

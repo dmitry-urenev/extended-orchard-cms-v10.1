@@ -15,11 +15,11 @@ namespace Orchard.Localization.Selectors
     {
         public const int SelectorPriority = -3;
 
-        private readonly IPageContextHolder _pageContextHolder;
+        private readonly IWorkContextAccessor _workContextAccessor;
 
-        public ContentCultureSelector(IPageContextHolder pageContextHolder)
+        public ContentCultureSelector(IWorkContextAccessor workContextAccessor)
         {
-            _pageContextHolder = pageContextHolder;
+            _workContextAccessor = workContextAccessor;
         }
 
 
@@ -30,8 +30,10 @@ namespace Orchard.Localization.Selectors
 
         private CultureSelectorResult EvaluateResult(HttpContextBase context)
         {
-            var pageContext = _pageContextHolder.PageContext;
-            if (pageContext == null && pageContext.ContentItem == null)
+            var wctx = _workContextAccessor.GetContext();
+            var pageContext = wctx.GetPageContext();
+
+            if (pageContext == null || pageContext.ContentItem == null)
                 return null;
 
             var localized = pageContext.ContentItem.As<ILocalizableAspect>();
@@ -40,7 +42,7 @@ namespace Orchard.Localization.Selectors
                 return null;
             }
 
-            return new CultureSelectorResult { Priority = SelectorPriority, CultureName = localized.Culture };
+            return new CultureSelectorResult { Priority = -1, CultureName = localized.Culture };
         }
     }
 }

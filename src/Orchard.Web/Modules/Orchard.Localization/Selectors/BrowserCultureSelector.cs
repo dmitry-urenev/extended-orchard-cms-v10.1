@@ -38,14 +38,14 @@ namespace Orchard.Localization.Selectors
                     {
                         var hasCultureCookie = context.Request.Cookies.AllKeys
                             .Any(k => CookieCultureSelector.FrontEndCookieName.Equals(k, StringComparison.OrdinalIgnoreCase));
-
+                        
                         if (hasCultureCookie)
                         {
                             return new CultureSelectorResult { Priority = -4, CultureName = CultureInfo.CreateSpecificCulture(userLanguage).Name };
                         }
                         else
                         {
-                            return new CultureSelectorResult { Priority = 0, CultureName = CultureInfo.CreateSpecificCulture(userLanguage).Name };
+                            return new CultureSelectorResult { Priority = -2, CultureName = CultureInfo.CreateSpecificCulture(userLanguage).Name };
                         }
                     }
 
